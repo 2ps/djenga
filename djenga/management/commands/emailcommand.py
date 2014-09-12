@@ -5,8 +5,8 @@ import logging
 from django.core.management.base import BaseCommand
 from commandlogginglevels import VerbosityLevels as V
 import socket
-from mixins import LoggingMixin
-from email.helpers import send_html_email
+from djenga.mixins.loggingmixin import LoggingMixin
+from djenga.email.helpers import send_html_email
 
 
 class EmailCommand(BaseCommand, LoggingMixin):

@@ -5,20 +5,28 @@ from __future__ import unicode_literals
 import logging
 import codecs
 import sys
+from django.conf import settings
 
 
 class LoggingMixin(object):
-    verbosity = 1
+    verbosity = 3 if settings.DEBUG else 1
     """@type: int"""
     indent = 0
     """@type: int"""
-    logging_level = logging.ERROR
+    logging_level = logging.DEBUG if settings.DEBUG else 1
     log_map = dict()
     logging_initialized = False
     print_level = True
 
     def set_verbosity(self, verbosity):
+        LEVELS = {
+            0: logging.CRITICAL,
+            1: logging.ERROR,
+            2: logging.WARNING,
+            3: logging.DEBUG,
+        }
         self.verbosity = verbosity
+        self.logging_level = LEVELS[verbosity]
 
     def color_format(self, level, message):
         level_colors = {
@@ -42,7 +50,8 @@ class LoggingMixin(object):
             logging.DEBUG: u'DBG',
             logging.CRITICAL: u'CRT'
         }
-        level_prefix = '%s[%s] ' % (color.format(level_colors[0]), level)
+        st_level = mp_levels[level]
+        level_prefix = '%s[%s] ' % (color.format(level_colors[0]), st_level)
         return u'{level_prefix}{color_normal}{message}{reset}'.format(
             level_prefix    = level_prefix if self.print_level else '',
             message         = message,
@@ -60,7 +69,14 @@ class LoggingMixin(object):
             10 = debug
         @return:
         """
-        if not logging_level in self.log_map:
+        LEVELS = {
+            logging.CRITICAL,
+            logging.ERROR,
+            logging.WARNING,
+            logging.INFO,
+            logging.DEBUG
+        }
+        if logging_level not in LEVELS:
             logging_level = logging.DEBUG
         message = format_string % args
         if logging_level >= self.logging_level:
