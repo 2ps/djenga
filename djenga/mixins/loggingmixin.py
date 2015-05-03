@@ -6,6 +6,7 @@ import logging
 import codecs
 import sys
 from django.conf import settings
+from django.core.management.base import OutputWrapper
 
 
 class LoggingMixin(object):
@@ -30,6 +31,9 @@ class LoggingMixin(object):
 
     def initialize_logging(self):
         if not self.logging_initialized:
+            self.stdout = OutputWrapper(
+                sys.stdout,
+                ending='')
             self.stdout = codecs.getwriter('utf8')(self.stdout)
             self.logging_initialized = True
 
@@ -87,19 +91,21 @@ class LoggingMixin(object):
         if logging_level >= self.logging_level:
             if hasattr(self, 'stdout'):
                 self.initialize_logging()
-                self.stdout.write(u' ' * self.indent, ending='')
+                self.stdout.write(u' ' * self.indent)
                 if self.stdout.isatty():
                     self.stdout.write(self.color_format(logging_level, message))
                 else:
                     self.stdout.write(message)
+                self.stdout.write('\n')
                 self.log_map.setdefault(logging_level, []).append(message)
 
     def log(self, format_string, *args):
         message = format_string % args
         if hasattr(self, 'stdout'):
             self.initialize_logging()
-            self.stdout.write(u' ' * self.indent, ending='')
+            self.stdout.write(u' ' * self.indent)
             self.stdout.write(message)
+            self.stdout.write('\n')
 
     def critical(self, format_string, *args):
         self.llog(logging.CRITICAL, format_string, *args)
