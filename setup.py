@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.0.1b'
+version = '0.0.1c'
 
 setup(name='djenga',
       version=version,
