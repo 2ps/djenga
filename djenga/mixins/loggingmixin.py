@@ -28,6 +28,11 @@ class LoggingMixin(object):
         self.verbosity = verbosity
         self.logging_level = LEVELS[verbosity]
 
+    def initialize_logging(self):
+        if not self.logging_initialized:
+            self.stdout = codecs.getwriter('utf8')(self.stdout)
+            self.logging_initialized = True
+
     def color_format(self, level, message):
         level_colors = {
             # Level and a pair of colors: first for the label, the rest for the text;
@@ -81,26 +86,20 @@ class LoggingMixin(object):
         message = format_string % args
         if logging_level >= self.logging_level:
             if hasattr(self, 'stdout'):
-                if not self.logging_initialized:
-                    self.stdout = codecs.getwriter('utf8')(self.stdout)
-                    self.logging_initialized = True
-                self.stdout.write(u' ' * self.indent)
+                self.initialize_logging()
+                self.stdout.write(u' ' * self.indent, ending='')
                 if self.stdout.isatty():
                     self.stdout.write(self.color_format(logging_level, message))
                 else:
                     self.stdout.write(message)
-                self.stdout.write(u'\n')
                 self.log_map.setdefault(logging_level, []).append(message)
 
     def log(self, format_string, *args):
         message = format_string % args
         if hasattr(self, 'stdout'):
-            if not self.logging_initialized:
-                self.stdout = codecs.getwriter('utf8')(self.stdout)
-                self.logging_initialized = True
-            self.stdout.write(u' ' * self.indent)
+            self.initialize_logging()
+            self.stdout.write(u' ' * self.indent, ending='')
             self.stdout.write(message)
-            self.stdout.write(u'\n')
 
     def critical(self, format_string, *args):
         self.llog(logging.CRITICAL, format_string, *args)

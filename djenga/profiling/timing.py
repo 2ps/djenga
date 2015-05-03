@@ -12,7 +12,7 @@ timers = threading.local()
 
 def start_timer(logger, name, count_queries=False):
     """
-    @type logger: logging.Logger | accounting.management.commands.accountingcommand.Command
+    @type logger: logging.Logger | djenga.mixins.LoggingMixin
     @type name: basestring
     @type count_queries: bool
     """
