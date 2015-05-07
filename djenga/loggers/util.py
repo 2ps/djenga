@@ -105,7 +105,7 @@ class ColorFormatter(logging.Formatter):
                     n_max=n_max
                 ) for key, value in mp_extra.iteritems()]),)
 
-        return '%s[%s/%s]%s %s%s%s'.format(
+        return '%s[%s/%s]%s %s%s%s' % (
             st_color.format(level_colors[0]),
             record.levelname,
             record.name,
