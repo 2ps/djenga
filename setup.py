@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.0.4'
+version = '0.0.5'
 
 setup(name='djenga',
       version=version,
@@ -18,7 +18,10 @@ Useful building blocks for Django.""",
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-          # -*- Extra requirements: -*-
+          'Django==1.7.3',
+          'cssutils==1.0',
+          'beautifulsoup4==4.3.2',
+          'pycrypto==2.6.1',
       ],
       entry_points="""
       # -*- Entry points: -*-
