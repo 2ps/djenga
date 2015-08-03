@@ -7,13 +7,6 @@ from django.db.backends.mysql.base import django_conversions
 from django.db import models
 
 
-try:
-    from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ['snomed\.models\.UuidField']) # pylint: disable=anomalous-backslash-in-string
-except ImportError:
-    pass
-
-
 def prep_uuid(
         o,
         *args # pylint: disable=unused-argument
@@ -36,7 +29,7 @@ class UuidField(models.fields.Field):
     The related value type of a Uuid field is the `uuid.UUID` class
     from python.
     """
-    __metaclass__ = SubfieldBase
+    __metaclass__ = models.SubfieldBase
 
     def to_python(self, value):
         if isinstance(value, UUID):

@@ -21,7 +21,7 @@ class JsonMixin(object):
                 if isinstance(value, Decimal):
                     mp[x] = float(value)
                 elif isinstance(value, date) or isinstance(value, datetime):
-                    mp[x] = '%s' % value
+                    mp[x] = value.isoformat()
                 else:
                     mp[x] = value
             except models.FieldDoesNotExist:
