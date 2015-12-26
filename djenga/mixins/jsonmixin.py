@@ -10,20 +10,30 @@ from django.db import models
 
 class JsonMixin(object):
     def to_json(self):
+        def get_json_value(data, field, field_name=None):
+            if isinstance(field, models.ForeignKey):
+                return
+            field_name = field_name or field.name
+            value = getattr(self, field_name, None)
+            if isinstance(value, Decimal):
+                data[field_name] = float(value)
+            elif isinstance(value, date) or isinstance(value, datetime):
+                data[field_name] = value.isoformat()
+            else:
+                data[field_name] = value
+
         mp = {}
-        rg_fields = self._meta.get_all_field_names()
-        for x in rg_fields:
-            try:
-                p_field = self._meta.get_field(x)
-                if isinstance(p_field, models.ForeignKey):
-                    continue
-                value = getattr(self, x, None)
-                if isinstance(value, Decimal):
-                    mp[x] = float(value)
-                elif isinstance(value, date) or isinstance(value, datetime):
-                    mp[x] = value.isoformat()
-                else:
-                    mp[x] = value
-            except models.FieldDoesNotExist:
-                mp[x] = getattr(self, x, None)
+        p = self._meta
+        fn = getattr(p, 'get_fields', None)
+        if fn:
+            for x in fn():
+                get_json_value(mp, x)
+        else:
+            rg_fields = p.get_all_field_names()
+            for x in rg_fields:
+                try:
+                    p_field = p.get_field(x)
+                    get_json_value(mp, p_field, x)
+                except models.FieldDoesNotExist:
+                    mp[x] = getattr(self, x, None)
         return mp
