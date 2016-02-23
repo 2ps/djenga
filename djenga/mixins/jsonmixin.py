@@ -12,8 +12,9 @@ class JsonMixin(object):
     def to_json(self):
         def get_json_value(data, field, field_name=None):
             if isinstance(field, models.ForeignKey):
-                return
-            field_name = field_name or field.name
+                field_name = field.name + '_id' or field_name
+            else:
+                field_name = field_name or field.name
             value = getattr(self, field_name, None)
             if isinstance(value, Decimal):
                 data[field_name] = float(value)
