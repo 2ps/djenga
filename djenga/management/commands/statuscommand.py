@@ -36,16 +36,23 @@ class StatusCommand(BaseCommand):
 
     def start_run(self):
         ManagementCommand.objects.update_or_create(
-            name=self.__module__,
+            name=self.command_name,
             defaults={
                 'last_run': datetime.now(timezone.utc),
                 'status': 'running',
             }
         )
 
+    @property
+    def command_name(self):
+        name = self.__module__
+        return name.replace('.management.commands', '')
+
     def end_run(self, success=True):
+        if self.current_line:
+            self.plain_log('\n')
         q = ManagementCommand.objects.get(
-            name=self.__module__,
+            name=self.command_name,
         )
         q.status = 'success' if success else 'error'
         if success:
@@ -65,8 +72,9 @@ class StatusCommand(BaseCommand):
         self.logging_level = logging.DEBUG if settings.DEBUG else 1
         self.output = []
         self.print_level = True
+        self.stdout.ending = ''
         self.stdout = codecs.getwriter('utf8')(self.stdout)
-        print 'My module is %s' % self.__module__
+        self.current_line = ''
 
     def color_format(self, level, message):
         level_colors = {
@@ -120,21 +128,46 @@ class StatusCommand(BaseCommand):
             logging_level = logging.DEBUG
         message = format_string % args
         if logging_level >= self.logging_level:
-            if hasattr(self, 'stdout'):
-                self.stdout.write(u' ' * self.indent)
-                if self.stdout.isatty():
-                    message = self.color_format(logging_level, message)
-                    self.stdout.write(message)
-                else:
-                    self.stdout.write(message)
-                self.stdout.write('\n')
-                self.output.append(message)
+            if self.stdout.isatty():
+                message = self.color_format(logging_level, message)
+                self.stdout.write(message)
+            else:
+                self.stdout.write(message)
+            self.stdout.write('\n')
+            self.add_message(message)
+
+    def add_message(self, message):
+        if self.current_line:
+            self.output.append((self.current_line + message).strip())
+            self.current_line = ''
+        elif message is not None:
+            self.output.append(message.strip())
 
     def log(self, format_string, *args):
         message = format_string % args
-        self.stdout.write(u' ' * self.indent)
         self.stdout.write(message)
         self.stdout.write('\n')
+        self.add_message(message)
+
+    def color_log(self, fn, format_string, *args):
+        message = format_string % args
+        if message[-1] == '\n':
+            close_line = True
+            message = message[:-1]
+        else:
+            close_line = False
+        message = fn(message)
+        self.stdout.write(message)
+        if close_line:
+            self.stdout.write('\n')
+            self.add_message(message)
+        elif self.current_line:
+            self.current_line += message
+        else:
+            self.current_line = message
+
+    def plain_log(self, format_string, *args):
+        self.color_log(lambda x: x, format_string, *args)
 
     def critical(self, format_string, *args):
         self.llog(logging.CRITICAL, format_string, *args)
@@ -161,11 +194,11 @@ class StatusCommand(BaseCommand):
     def show_last(self):
         try:
             p = CommandOutput.objects.filter(
-                command__name=self.__module__
+                command__name=self.command_name
             ).latest('id')
             self.log('%s', p.output)
         except CommandOutput.DoesNotExist:
-            self.log('This is the first run of %s', self.__module__)
+            self.log('This is the first run of %s', self.command_name)
 
     def execute(self, *args, **options):
         if options.get('b_show_last', False):
