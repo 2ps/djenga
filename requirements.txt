@@ -4,3 +4,4 @@ beautifulsoup4==4.3.2
 pycrypto==2.6.1
 pytz
 psutil
+python-dateutil

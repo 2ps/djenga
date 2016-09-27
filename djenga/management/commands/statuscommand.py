@@ -8,6 +8,7 @@ import sys
 from datetime import datetime
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.db import connections
 from django.utils import timezone
 from djenga.models import ManagementCommand
 from djenga.models import CommandOutput
@@ -51,6 +52,9 @@ class StatusCommand(BaseCommand):
     def end_run(self, success=True):
         if self.current_line:
             self.plain_log('\n')
+        connection = connections['default']
+        if connection.connection and not connection.is_usable():
+            connection.close()
         q = ManagementCommand.objects.get(
             name=self.command_name,
         )
@@ -214,5 +218,3 @@ class StatusCommand(BaseCommand):
             raise
         finally:
             self.end_run(success)
-
-
