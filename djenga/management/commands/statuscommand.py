@@ -67,7 +67,7 @@ class StatusCommand(BaseCommand):
             output='\n'.join(self.output)
         )
 
-    def __init__(self, name=None):
+    def __init__(self):
         super(StatusCommand, self).__init__()
         self.verbosity = 3 if settings.DEBUG else 1
         """@type: int"""

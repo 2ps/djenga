@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.2.1'
+version = '0.2.2'
 
 setup(name='djenga',
       version=version,
@@ -21,10 +21,11 @@ Useful building blocks for Django.""",
           'Django>=1.9',
           'cssutils==1.0',
           'beautifulsoup4==4.3.2',
-          'pycrypto==2.6.1',
+          'pycrypto>=2.6.1',
           'pytz',
           'psutil',
           'python-dateutil',
+          'pyyaml',
       ],
       entry_points="""
       # -*- Entry points: -*-

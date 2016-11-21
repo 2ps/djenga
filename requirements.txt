@@ -5,3 +5,4 @@ pycrypto==2.6.1
 pytz
 psutil
 python-dateutil
+pyyaml
