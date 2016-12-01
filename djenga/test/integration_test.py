@@ -76,7 +76,7 @@ class IntegrationTest(object):
             if key.startswith('test') and callable(value)
         ]
         test_methods.sort(key=lambda fn: fn.__name__)
-        all_passed = False
+        all_passed = True
         for x in test_methods:
             flush_print('%s.%s........', self.__class__.__name__, x.__name__, end='')
             tm_start = time()

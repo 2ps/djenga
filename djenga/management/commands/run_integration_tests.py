@@ -83,7 +83,8 @@ class Command(BaseCommand):
     def run_tests(self):
         all_passed = True
         for x in self.tests:
-            all_passed = all_passed and x.run_test()
+            status = x.run_test()
+            all_passed = status and all_passed
         return all_passed
 
     def handle(self, *args, **options):
