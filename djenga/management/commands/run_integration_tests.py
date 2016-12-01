@@ -1,4 +1,5 @@
 import inspect
+import sys
 from importlib import import_module
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -69,7 +70,9 @@ class Command(BaseCommand):
     def set_tests(self, tests):
         self.tests = []
         for module in self.modules:
-            for klass in inspect.getmembers(module):
+            module = import_module(module)
+            for name, klass in inspect.getmembers(module):
+                if name.startswith('__') or not inspect.isclass(klass): continue
                 x = klass()
                 if isinstance(x, IntegrationTest) and (
                     not tests or
@@ -87,4 +90,5 @@ class Command(BaseCommand):
         self.set_modules(options.get('modules'))
         self.set_tests(options.get('tests'))
         success = self.run_tests()
-        return 0 if success else 1
+        if not success:
+            sys.exit(1)
