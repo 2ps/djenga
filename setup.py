@@ -1,14 +1,24 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.2.8'
+version = '0.3.1'
 
 setup(name='djenga',
       version=version,
       description="Useful building blocks for Django.",
       long_description="""\
 Useful building blocks for Django.""",
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+          'Development Status :: 5 - Production/Stable',
+          'Intended Audience :: Developers',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+          'Programming Language :: Python :: 2',
+          'Programming Language :: Python :: 2.7',
+          'Framework :: Django',
+          'Framework :: Django :: 1.10',
+          'Framework :: Django :: 1.9',
+          'License :: OSI Approved :: BSD License',
+      ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='django python',
       author='Preetam Shingavi',
       author_email='p.shingavi@yahoo.com',
