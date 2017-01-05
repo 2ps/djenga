@@ -42,7 +42,7 @@ class CsvViewMixin(object):
         self.writer.writerow(data)
 
 
-class CsvView(CsvViewMixin):
+class CsvView(CsvViewMixin, View):
     """
     A helper class so that you can just subclass from
     CsvView directly instead of using the mixin.
@@ -98,7 +98,7 @@ class ZippedCsvMixin(object):
         self.writer.writerow(data)
 
 
-class ZippedCsvView(View):
+class ZippedCsvView(ZippedCsvMixin, View):
     """
     A helper class so that you can just subclass from
     ZippedCsvView directly instead of using the mixin.
