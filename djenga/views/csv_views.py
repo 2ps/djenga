@@ -9,19 +9,19 @@ from django.http import StreamingHttpResponse
 from django.views.generic import View
 
 
-class CsvView(View):
+class CsvViewMixin(object):
     """
     This class offers several utility functions to
     make it easier to return a CSV response to a user.
     To use:
-        1.  Sub-class this class
+        1.  Add this class as a mixin to any class-based view
         2.  Call self.initialize_response with a proposed download filename
         3.  write data to the CSV response with self.writerow
         4.  return self.response from the get or post function to send the
             CSV to the user
     """
     def __init__(self, **kwargs):
-        super(CsvView, self).__init__(**kwargs)
+        super(CsvViewMixin, self).__init__(**kwargs)
         self.response = None
         """:type HttpResponse"""
         self.writer = None
@@ -42,12 +42,20 @@ class CsvView(View):
         self.writer.writerow(data)
 
 
-class ZippedCsvView(View):
+class CsvView(CsvViewMixin):
     """
-    This class offers several utility functions to
+    A helper class so that you can just subclass from
+    CsvView directly instead of using the mixin.
+    """
+    pass
+
+
+class ZippedCsvMixin(object):
+    """
+    This mixin offers several utility functions to
     make it easier to return a CSV response to a user.
     To use:
-        1.  Sub-class this class
+        1.  Add this class as a mixin
         2.  Call self.initialize_response with a proposed download filename
         3.  write data to the CSV response with self.writerow
         4.  call self.finalize_response to finalize the response
@@ -55,7 +63,7 @@ class ZippedCsvView(View):
             CSV to the user
     """
     def __init__(self, **kwargs):
-        super(ZippedCsvView, self).__init__(**kwargs)
+        super(ZippedCsvMixin, self).__init__(**kwargs)
         self.response = None
         """:type HttpResponse"""
         self.writer = None
@@ -88,3 +96,11 @@ class ZippedCsvView(View):
 
     def writerow(self, data):
         self.writer.writerow(data)
+
+
+class ZippedCsvView(View):
+    """
+    A helper class so that you can just subclass from
+    ZippedCsvView directly instead of using the mixin.
+    """
+    pass

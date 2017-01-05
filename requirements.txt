@@ -6,3 +6,4 @@ pytz
 psutil
 python-dateutil
 pyyaml
+twine
