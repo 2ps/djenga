@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3.3'
+version = '0.3.5'
 
 setup(name='djenga',
       version=version,
@@ -15,6 +15,7 @@ Useful building blocks for Django.""",
           'Programming Language :: Python :: 2',
           'Programming Language :: Python :: 2.7',
           'Framework :: Django',
+          'Framework :: Django :: 1.11',
           'Framework :: Django :: 1.10',
           'Framework :: Django :: 1.9',
           'License :: OSI Approved :: BSD License',
