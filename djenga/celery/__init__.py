@@ -1,6 +1,6 @@
-from utils import add_progress
+from utils import update_progress
 
 
 __all__ = [
-    'add_progress',
+    'update_progress',
 ]
