@@ -31,4 +31,8 @@ def update_progress(task, progress, *args, **kwargs):
             progress='\n'.join(current),
             **kwargs)
     setattr(task.request, 'progress', current)
+    values = getattr(task.request, 'info', {})
+    for key, value in kwargs.items():
+        values[key] = value
+    setattr(task.request, 'info', values)
     logger.info(progress)
