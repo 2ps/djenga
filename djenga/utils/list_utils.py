@@ -9,5 +9,6 @@ def chunkify(rg, n_max=1000):
     """
     m, n_len = 0, len(rg)
     while m < n_len:
-        m += n_max
-        yield rg[m - n_max:m]
+        l, m = m, m + n_max
+        yield rg[l:m]
+
