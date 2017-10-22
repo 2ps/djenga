@@ -1,3 +1,6 @@
 
 from pynliner import Pynliner
-from pynliner import from_string
+
+
+def from_string(x):
+    return Pynliner().from_string(x)
