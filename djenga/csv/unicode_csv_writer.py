@@ -1,12 +1,15 @@
-#encoding: utf-8
+# encoding: utf-8
 
 import csv
-import cStringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 
 class UnicodeCsvWriter(object):
     def __init__(self, f, dialect=csv.excel, **kwds):
-        self.queue = cStringIO.StringIO()
+        self.queue = StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
 
@@ -24,5 +27,3 @@ class UnicodeCsvWriter(object):
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
-
-
