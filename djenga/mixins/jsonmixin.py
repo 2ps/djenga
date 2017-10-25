@@ -72,13 +72,13 @@ def to_json(p, additional_fields=None):
 
 
 def from_dict(p, data):
-    for key, value in data.iteritems():
+    for key, value in data.items():
         setattr(p, key, value)
 
 
 def from_json(p, data):
     data = json.loads(data, object_pairs_hook=pairs_hook)
-    for key, value in data.iteritems():
+    for key, value in data.items():
         setattr(p, key, value)
 
 

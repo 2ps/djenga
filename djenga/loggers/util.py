@@ -1,4 +1,4 @@
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 import logging
 import logging.handlers
 import os
@@ -92,7 +92,7 @@ class ColorFormatter(logging.Formatter):
         n_max = 0
         st_extra = ''
         for key in set(dir(record)) - _Constants.NOT_EXTRA:
-            if key.startswith('_'):
+            if key.startswith('_') or key == 'stack_info':
                 continue
             mp_extra[key] = getattr(record, key)
             if len(key) > n_max:
@@ -103,7 +103,8 @@ class ColorFormatter(logging.Formatter):
                     key=key,
                     value=value,
                     n_max=n_max
-                ) for key, value in mp_extra.iteritems()]),)
+                ) for key, value in mp_extra.items()
+            ]),)
 
         return '%s[%s/%s]%s %s%s%s' % (
             st_color.format(level_colors[0]),
@@ -143,7 +144,7 @@ class BriefColorFormatter(logging.Formatter):
         n_max = 0
         st_extra = ''
         for key in set(dir(record)) - _Constants.NOT_EXTRA:
-            if key.startswith('_'):
+            if key.startswith('_') or key == 'stack_info':
                 continue
             mp_extra[key] = getattr(record, key)
             if len(key) > n_max:
@@ -154,8 +155,7 @@ class BriefColorFormatter(logging.Formatter):
                     key=key,
                     value=value,
                     n_max=n_max
-                ) for key, value in mp_extra.iteritems()]),)
-
+                ) for key, value in mp_extra.items()]),)
         return u'%s[%s]%s %s%s%s' % (
             st_color.format(level_colors[0]),
             _Constants.SHORT_LEVELS.get(record.levelname, 'GEN'),
