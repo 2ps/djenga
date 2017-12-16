@@ -31,9 +31,10 @@ class LoggingMixin(object):
 
     def initialize_logging(self):
         if not self.logging_initialized:
-            self.stdout = OutputWrapper(
-                getattr(self, 'stdout', sys.stdout),
-                ending='')
+            try:
+                self.stdout = OutputWrapper(self.stdout._out, ending='')
+            except AttributeError:
+                self.stdout = OutputWrapper(sys.stdout, ending='')
             self.stdout = codecs.getwriter('utf8')(self.stdout)
             self.logging_initialized = True
 
@@ -128,7 +129,3 @@ class LoggingMixin(object):
         self.llog(logging.ERROR, u'Exception message: %s', p_exception)
         self.llog(logging.ERROR, u'Exception type   : %s', p_type)
         self.llog(logging.ERROR, u'Traceback\n%s', p_traceback.format_exc())
-
-
-
-

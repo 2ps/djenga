@@ -1,12 +1,15 @@
 import inspect
+import os
 import sys
 from importlib import import_module
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from djenga.test import IntegrationTest
+from djenga.mixins import LoggingMixin
+from djenga.utils.print_utils import dot_lead
 
 
-class Command(BaseCommand):
+class Command(LoggingMixin, BaseCommand):
     """
     The IntegrationTestCommand is a maangement command
     that will run all classes in any INSTALLED_APP's
@@ -47,12 +50,13 @@ class Command(BaseCommand):
         return parser
 
     def check_module(self, module, display_warnings=True):
+        exists = os.path.exists('%s/__init__.py' % module.replace('.', '/'))
         try:
             import_module(module)
             return True
         except ImportError:
-            if display_warnings:
-                self.stdout.write('WARNING: could not import module [%s]' % module)
+            if display_warnings or exists:
+                self.warning('WARNING: could not import module [%s]', module)
             return False
 
     def set_modules(self, modules):
@@ -70,6 +74,7 @@ class Command(BaseCommand):
     def set_tests(self, tests):
         self.tests = []
         for module in self.modules:
+            self.info(dot_lead('Checking %s for tests', module))
             module = import_module(module)
             for name, klass in inspect.getmembers(module):
                 if name.startswith('__') or not inspect.isclass(klass): continue
@@ -78,6 +83,7 @@ class Command(BaseCommand):
                     not tests or
                     klass.__name__ in tests
                 ):
+                    self.info(dot_lead('  + loaded %s', klass.__name__))
                     self.tests.append(x)
 
     def run_tests(self):
