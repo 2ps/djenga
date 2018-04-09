@@ -12,6 +12,7 @@ from decimal import ROUND_UP
 __all__ = [
     u'currency_round_down',
     u'currency_round_up',
+    u'currency_round_up4',
 ]
 
 
@@ -38,5 +39,17 @@ def currency_round_up(amount):
     amount = Decimal(amount)
     amount = amount.quantize(Decimal(u'.0001'), rounding=ROUND_FLOOR)
     amount = amount.quantize(Decimal(u'.01'), rounding=ROUND_UP)
+    return amount
+
+
+def currency_round_up4(amount):
+    """
+    Useful helper function that takes a numerical amount, converts
+    it to a decimal.Decimal object and rounds it up to the nearest
+    one-hundredth of a cent.
+    """
+    amount = amount or 0.00
+    amount = Decimal(amount)
+    amount = amount.quantize(Decimal(u'.0001'), rounding=ROUND_UP)
     return amount
 

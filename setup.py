@@ -9,7 +9,7 @@ try:
 except ImportError:
     bdist_wheel = None
 
-version = '0.5.3'
+version = '0.6.0'
 
 setup(name='djenga',
       version=version,
@@ -22,6 +22,8 @@ Useful building blocks for Django.""",
           'Topic :: Software Development :: Libraries :: Python Modules',
           'Programming Language :: Python :: 2',
           'Programming Language :: Python :: 2.7',
+          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3.6',
           'Framework :: Django',
           'Framework :: Django :: 1.11',
           'Framework :: Django :: 1.10',
@@ -38,6 +40,7 @@ Useful building blocks for Django.""",
       include_package_data=True,
       zip_safe=True,
       install_requires=[
+          'six>=1.10.0',
           'Django>=1.9',
           'cssutils==1.0',
           'beautifulsoup4>=4.3.2',

@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 import csv
+import six
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -18,7 +19,12 @@ class UnicodeCsvWriter(object):
         writerow(unicode) -> None
         This function takes a Unicode string and encodes it to the output.
         """
-        self.writer.writerow([s.encode('utf-8') if isinstance(s, unicode) else s for s in row ])
+        if six.PY3:
+            self.writer.writerow([s.encode('utf-8') for s in row ])
+        else:
+            self.writer.writerow([
+                s.encode('utf-8') for s in row if isinstance(s, unicode)
+            ])
         data = self.queue.getvalue()
         data = data.decode('utf-8')
         self.stream.write(data)

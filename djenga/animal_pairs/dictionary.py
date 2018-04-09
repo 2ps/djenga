@@ -22,6 +22,8 @@ ADJECTIVES = [
     'avid',
     'beardless',
     'benevolent',
+    'bicameral',
+    'big',
     'bionic',
     'blissful',
     'bodacious',
@@ -31,11 +33,14 @@ ADJECTIVES = [
     'bubbly',
     'careful',
     'cautious',
+    'cavernous',
     'charming',
     'cheeky',
     'cheerful',
     'circumspect',
     'cognizant',
+    'cool',
+    'collaborative',
     'collectible',
     'colorful',
     'colossal',
@@ -45,6 +50,7 @@ ADJECTIVES = [
     'compassionate',
     'constant',
     'contemplative',
+    'contiguous',
     'convincing',
     'convivial',
     'cooperative',
@@ -73,8 +79,10 @@ ADJECTIVES = [
     'eager',
     'earnest',
     'easygoing',
+    'ebullient',
     'eccentric',
     'ecstatic',
+    'effluvial',
     'effervescent',
     'elaborate',
     'elated',
@@ -124,8 +132,10 @@ ADJECTIVES = [
     'helpful',
     'heroic',
     'hydraulic',
+    'hyena',
     'idealistic',
     'illustrious',
+    'illustrative',
     'imaginative',
     'immense',
     'impartial',
@@ -142,13 +152,28 @@ ADJECTIVES = [
     'intuitive',
     'invaluable',
     'inventive',
+    'iterative',
     'jaunty',
     'jolly',
     'joyful',
     'joyous',
     'jubilant',
     'jumping',
+    'katabatic',
     'keen',
+    'kempt',
+    'kept',
+    'kind',
+    'kindled',
+    'kinematic',
+    'kinesthtic',
+    'kingly',
+    'kitschy',
+    'knightly',
+    'knowing',
+    'kooky',
+    'kyphotic',
+    'large',
     'laughing',
     'legendary',
     'lenient',
@@ -188,6 +213,8 @@ ADJECTIVES = [
     'noncommittal',
     'observant',
     'omnidirectional',
+    'omnipotent',
+    'omnipresent',
     'omnivorous',
     'optimal',
     'optimistic',
@@ -224,6 +251,7 @@ ADJECTIVES = [
     'radiant',
     'reassured',
     'reclusive',
+    'recursive',
     'recurring',
     'reflective',
     'rejoicing',
@@ -318,9 +346,25 @@ ADJECTIVES = [
     'witty',
     'wonderful',
     'wondrous',
+    'yakkety',
+    'yawning',
+    'yeatsian',
+    'yelling',
+    'yellow',
+    'yellowing',
+    'young',
+    'youthful',
+    'yummy',
     'zany',
+    'zaftig',
     'zealous',
     'zestful',
+    'zesty',
+    'zippy',
+    'zoonatic',
+    'zygomorphous',
+    'zymoid',
+    'zymolytic',
 ]
 ANIMALS = [
     'aardvark',
@@ -330,6 +374,7 @@ ANIMALS = [
     'angelfish',
     'anteater',
     'antelope',
+    'ape',
     'armadillo',
     'badger',
     'barracuda',
@@ -338,18 +383,24 @@ ANIMALS = [
     'bear',
     'beaver',
     'bird',
+    'bittern',
+    'bobolink',
     'brontosaurus',
     'boa-constrictor',
+    'buffalo',
     'bulldog',
     'bumblebee',
     'butterfly',
+    'buzzard',
     'camel',
     'caribou',
     'cassowary',
     'cat',
     'catfish',
     'caterpillar',
+    'cauldron',
     'centipede',
+    'cete',
     'chameleon',
     'cheetah',
     'chinchilla',
@@ -357,6 +408,7 @@ ANIMALS = [
     'cobra',
     'coelacanth',
     'condor',
+    'coot',
     'coral-snake',
     'cormorant',
     'crab',
@@ -365,6 +417,8 @@ ANIMALS = [
     'dalmatian',
     'deer',
     'dolphin',
+    'donkey',
+    'dotterel',
     'dove',
     'dragonfish',
     'dragonfly',
@@ -381,6 +435,7 @@ ANIMALS = [
     'flamingo',
     'fox',
     'frog',
+    'gang',
     'gazelle',
     'gecko',
     'gerbil',
@@ -408,12 +463,14 @@ ANIMALS = [
     'iguana',
     'jackal',
     'jaguar',
+    'jay',
     'jellyfish',
     'kangaroo',
     'kestrel',
     'kingfisher',
     'koala',
     'koi',
+    'lapwing',
     'lark',
     'lemur',
     'leopard',
@@ -433,10 +490,12 @@ ANIMALS = [
     'mongoose',
     'moose',
     'mouse',
+    'mule',
     'narwhal',
     'nautilus',
     'newt',
     'nightingale',
+    'obstinacy',
     'octopus',
     'okapi',
     'opossum',
@@ -452,6 +511,7 @@ ANIMALS = [
     'pelican',
     'penguin',
     'pheasant',
+    'pig',
     'pigeon',
     'platypus',
     'polar-bear',
@@ -479,6 +539,9 @@ ANIMALS = [
     'seal',
     'shark',
     'sheep',
+    'shrewdness',
+    'sloth',
+    'sleuth',
     'snowy-owl',
     'songbird',
     'sparrow',
@@ -499,13 +562,130 @@ ANIMALS = [
     'vampire-bat',
     'velociraptor',
     'wallaby',
+    'water-buffalo',
     'walrus',
+    'whale',
     'wolf',
     'wolverine',
     'wombat',
     'wrasse',
     'wren',
+    'xantus',
+    'xenarthra',
+    'xenops',
+    'xerus',
+    'yabby',
     'yak',
+    'yellow-eyed-penguin',
+    'yellow-ground-squirrel',
+    'yellow-mongoose',
+    'yuma-myotis',
     'zebra',
+    'zebra-finch',
+    'zebrafish',
+    'zebra-shark',
+    'zebroid',
+    'zebu',
+    'zonkey',
+    'zorilla',
+    'zorro',
+    'zorse',
+    'clowder',      # cats
+    'pounce',       # cats
+    'kindle',       # kittens
+    'litter',       # kittens, dogs
+    'intrigue',     # kittens
+    'cowardice',    # dogs
+    'pace',         # donkeys
+    'parade',       # elephants
+    'business',     # ferrets
+    'shrewdness',   # apes
+    'gang',         # buffalo
+    'obstinacy',    # buffalo
+    'leash',        # foxes
+    'skulk',        # foxes
+    'earth',        # foxes
+    'tower',        # giraffes
+    'tribe',        # goats
+    'trip',         # goats
+    'band',         # gorillas
+    'bloat',        # hippos
+    'thunder',      # hippos
+    'cackle',       # hyenas
+    'shadow',       # jaguar
+    'troop',        # kangaroo
+    'mob',          # kangaroo
+    'conspiracy',   # lemurs
+    'leap',         # leopards
+    'pride',        # lions
+    'sawt',         # lions
+    'richness',     # martens
+    'labor',        # moles
+    'troop',        # monkeys
+    'barrel',       # monkeys
+    'pack',         # mules
+    'span',         # mules
+    'barren',       # mules
+    'romp',         # otter
+    'drift',        # pigs
+    'drove',        # drove
+    'sounder',      # pigs
+    'team',         # pigs
+    'passel',       # pigs
+    'prickle',      # porcupines
+    'pod',          # porpoises, whales
+    'school',       # porpoises, whales
+    'herd',         # porpoises
+    'turmoil',      # porpoises
+    'colony',       # rabbits
+    'warren',       # rabbits
+    'nest',         # rabbits
+    'down',         # rabbits
+    'husk',         # rabbits
+    'gam',          # whales
+    'route',        # wolves
+    'woute',        # wolves
+    'sedge',        # bitterns
+    'wake',         # buzzard
+    'chain',        # bobolink
+    'cover',        # coot
+    'gulp',         # cormorants
+    'murder',       # crows, magpies
+    'horde',        # crows
+    'trip',         # dotterel
+    'dule',         # doves
+    'pitying',      # doves
+    'brace',        # ducks
+    'team',         # ducks
+    'flock',        # ducks
+    'raft',         # ducks
+    'paddling',     # ducks
+    'badling',      # ducks
+    'convocation',  # eagles
+    'charm',        # finches, magpies
+    'flamingos',    # stand
+    'gaggle',       # geese
+    'skein',        # geese
+    'cast',         # hawk
+    'kettle',       # hawk
+    'boil',         # hawk
+    'sedge',        # heron
+    'siege',        # heron
+    'party',        # jays
+    'scold',        # jays
+    'deceit',       # lapwings
+    'exaltation',   # larks
+    'sord',         # mallards
+    'tiding',       # magpies
+    'gulp',         # magpies
+    'watch',        # nightingales
+    'parliament',   # owls
+    'pandemonium',  # parrots
+    'company',      # parrots
+    'covey',        # partridge
+    'ostentation',  # peacocks
+    'muster',       # peacocks, penguins
+    'parcel',       # penguins
+    'rookery',      # rookery
 ]
 

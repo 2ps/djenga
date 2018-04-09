@@ -1,4 +1,4 @@
-Django>=1.9
+Django==1.11.6
 cssutils==1.0
 beautifulsoup4==4.6.0
 pynliner==0.8.0
@@ -8,3 +8,4 @@ psutil
 python-dateutil
 pyyaml
 twine
+six
