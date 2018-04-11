@@ -19,12 +19,13 @@ class UnicodeCsvWriter(object):
         writerow(unicode) -> None
         This function takes a Unicode string and encodes it to the output.
         """
-        if six.PY3:
-            self.writer.writerow([s.encode('utf-8') for s in row ])
-        else:
-            self.writer.writerow([
-                s.encode('utf-8') for s in row if isinstance(s, unicode)
-            ])
+        data = []
+        basestring_type = six.string_types[0]
+        for value in row:
+            if not isinstance(value, basestring_type):
+                value = '%s' % (value,)
+            data.append(value.encode('utf-8'))
+        self.writer.writerow(data)
         data = self.queue.getvalue()
         data = data.decode('utf-8')
         self.stream.write(data)
