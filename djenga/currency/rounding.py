@@ -7,6 +7,7 @@ from decimal import Decimal
 from decimal import ROUND_FLOOR
 from decimal import ROUND_DOWN
 from decimal import ROUND_UP
+from decimal import ROUND_HALF_UP
 
 
 __all__ = [
@@ -53,3 +54,31 @@ def currency_round_up4(amount):
     amount = amount.quantize(Decimal(u'.0001'), rounding=ROUND_UP)
     return amount
 
+
+def currency_round_half_up(amount):
+    """
+    Useful helper function that takes a numerical amount, converts
+    it to a decimal.Decimal object and rounds it up to the nearest
+    cent using half-adjust rounding.  Unlike `currency_round_up`, this
+    function will use half-adjust rounding for the cents place after
+    floor rounding the ten thousandths place.
+    """
+    amount = amount or 0.00
+    amount = Decimal(amount)
+    amount = amount.quantize(Decimal(u'.0001'), rounding=ROUND_FLOOR)
+    amount = amount.quantize(Decimal(u'.01'), rounding=ROUND_HALF_UP)
+    return amount
+
+
+def currency_round_half_up4(amount):
+    """
+    Useful helper function that takes a numerical amount, converts
+    it to a decimal.Decimal object and rounds it up to the nearest
+    one-hundredth of a cent using half-adjust rounding.  Unlike
+    `currency_round_up4`, this function will use half-adjust rounding
+    for the ten thousandths place.
+    """
+    amount = amount or 0.00
+    amount = Decimal(amount)
+    amount = amount.quantize(Decimal(u'.0001'), rounding=ROUND_HALF_UP)
+    return amount

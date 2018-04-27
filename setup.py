@@ -9,7 +9,7 @@ try:
 except ImportError:
     bdist_wheel = None
 
-version = '0.6.1'
+version = '0.6.2'
 
 setup(name='djenga',
       version=version,
