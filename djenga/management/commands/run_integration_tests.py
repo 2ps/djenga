@@ -11,7 +11,7 @@ from djenga.utils.print_utils import dot_lead
 
 class Command(LoggingMixin, BaseCommand):
     """
-    The IntegrationTestCommand is a maangement command
+    The IntegrationTestCommand is a mangement command
     that will run all classes in any INSTALLED_APP's
     `integration_test` submodule or the specified module
     so long as the class is a subclass of
@@ -20,7 +20,7 @@ class Command(LoggingMixin, BaseCommand):
     help = (
         'run_integration_tests is a management command '
         "that will run all classes in any INSTALLED_APP's "
-        '`integration_test` submodule or the specified module '
+        '`integration_tests` submodule or the specified module '
         'so long as the class is a subclass of '
         '`djenga.test.IntegrationTest`.')
 
