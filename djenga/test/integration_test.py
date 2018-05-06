@@ -67,7 +67,8 @@ class IntegrationTest(object):
 
     def assert_equal(self, left, right, message=''):
         if left != right:
-            raise IntegrationTestException(message)
+            raise IntegrationTestException(
+                message or '[%s] != [%s]' % (left, right,))
 
     def run_test(self):
         test_methods = [
@@ -85,9 +86,7 @@ class IntegrationTest(object):
             try:
                 x()
             except IntegrationTestException as ex:
-                status = 'failed'
-                if ex.message:
-                    status += ' (%s)' % ex.message
+                status = 'failed (%s)' % (ex,)
                 all_passed = False
             finally:
                 tm_total = time() - tm_start
