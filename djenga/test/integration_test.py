@@ -69,6 +69,10 @@ class IntegrationTest(object):
         if left != right:
             raise IntegrationTestException(message)
 
+    def assert_not_equal(self, left, right, message=''):
+        if left == right:
+            raise IntegrationTestException(message)
+
     def run_test(self):
         test_methods = [
             value
