@@ -1,4 +1,5 @@
 # encoding: utf-8
+from functools import wraps
 import logging
 
 
@@ -36,3 +37,37 @@ def update_progress(task, progress, *args, **kwargs):
         values[key] = value
     setattr(task.request, 'info', values)
     logger.info(progress)
+
+
+def auto_step(key, description=None,
+              start_detail='in progress', end_detail='done'):
+    """
+    Make sure to apply the `@auto_step` decorator **before** the `@app.task`
+    decorator.  e.g.
+
+            @app.task(bind=True, name='my.cool_task',
+                      base='djenga.celery.tasks.DetailTask')
+            @auto_step(key=1, description='eat cookies')
+            def eat_cookies(self):
+                pass
+    :param key:
+    :param description:
+    :param start_detail:
+    :param end_detail:
+    :return:
+    """
+    def decorator(fn):
+        @wraps(fn)
+        def decorated(self, *args, **kwargs):
+            error = None
+            self.start_step(key, description, start_detail)
+            try:
+                result = fn(self, *args, **kwargs)
+                return result
+            except Exception as ex:
+                error = '%s' % (ex,)
+                raise
+            finally:
+                self.end_step(error=error)
+        return decorated
+    return decorator

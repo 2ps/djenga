@@ -1,3 +1,17 @@
+"""
+This module provides functions for rounding numbers as currency.
+
+>>> currency_round_down(1.9999)
+Decimal('1.99')
+>>> currency_round_up(1.9911)
+Decimal('2.00')
+>>> currency_round_up4(1.9911)
+Decimal('1.9912')
+>>> currency_round_half_up(1.9951)
+Decimal('2.00')
+>>> currency_round_half_up4(1.995555)
+Decimal('1.9956')
+"""
 
 # encoding: utf-8
 
@@ -14,6 +28,8 @@ __all__ = [
     u'currency_round_down',
     u'currency_round_up',
     u'currency_round_up4',
+    u'currency_round_half_up',
+    u'currency_round_half_up4',
 ]
 
 
