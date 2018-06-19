@@ -68,7 +68,12 @@ class IntegrationTest(object):
     def assert_equal(self, left, right, message=''):
         if left != right:
             raise IntegrationTestException(
-                message or '[%s] != [%s]' % (left, right,))
+                message or 'failure: [%s] != [%s]' % (left, right))
+
+    def assert_not_equal(self, left, right, message=''):
+        if left == right:
+            raise IntegrationTestException(
+                message or 'failure: [%s] == [%s]' % (left, right))
 
     def run_test(self):
         test_methods = [
