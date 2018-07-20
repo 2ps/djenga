@@ -71,11 +71,12 @@ class DetailTask(Task):
             self.request.current_detail = None
 
     def save_details(self):
-        self.backend.store_result(
-            self.request.id,
-            result=None,
-            state=states.STARTED,
-            details=self.request.details)
+        if self.request.id:
+            self.backend.store_result(
+                self.request.id,
+                result=None,
+                state=states.STARTED,
+                details=self.request.details)
 
     def start_step(self, key, description=None, detail='in progress'):
         self.initialize_detail()
@@ -112,11 +113,16 @@ class DetailTask(Task):
         r = self.request
         if error:
             r.current_detail.error = error
+            r.current_detail.add_detail(error)
+            logger.info(
+                '[%s/%s] %s', r.current_detail.key,
+                r.current_detail.description, error)
+        else:
+            r.current_detail.add_detail(detail)
+            logger.info(
+                '[%s/%s] %s', r.current_detail.key,
+                r.current_detail.description, detail)
         r.current_detail.end_time()
-        r.current_detail.add_detail(detail)
-        logger.info(
-            '[%s/%s] %s', r.current_detail.key,
-            r.current_detail.description, detail)
         r.detail_stack.pop()
         if r.detail_stack:
             r.current_detail = r.detail_stack[-1]

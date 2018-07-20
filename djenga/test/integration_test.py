@@ -2,6 +2,7 @@ import inspect
 import yaml
 from time import time
 from djenga.utils import flush_print
+from djenga.utils.print_utils import dot_leader
 
 
 class IntegrationTestException(Exception):
@@ -84,7 +85,7 @@ class IntegrationTest(object):
         test_methods.sort(key=lambda fn: fn.__name__)
         all_passed = True
         for x in test_methods:
-            flush_print('%s.%s........', self.__class__.__name__, x.__name__, end='')
+            dot_leader('%s.%s', self.__class__.__name__, x.__name__, end='')
             tm_start = time()
             status = 'passed'
             units = 's'
