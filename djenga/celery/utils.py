@@ -5,6 +5,9 @@ import logging
 
 __all__ = [
     'update_progress',
+    'auto_step',
+    'unbound_step',
+    'substep',
 ]
 logger = logging.getLogger(__name__)
 
@@ -68,6 +71,34 @@ def auto_step(key, description=None,
                 error = '%s' % (ex,)
                 raise
             finally:
-                self.end_step(error=error)
+                self.end_step(error, end_detail)
         return decorated
     return decorator
+
+
+def unbound_step(
+        fn, task, key,
+        description=None,
+        start_detail='in progress',
+        end_detail='done'):
+    description = description or fn.__name__
+
+    def decorated(*args, **kwargs):
+        error = None
+        task.start_step(key, description, start_detail)
+        try:
+            result = fn(*args, **kwargs)
+            return result
+        except Exception as ex:
+            error = '%s' % (ex,)
+            raise
+        finally:
+            task.end_step(error, end_detail)
+
+    return decorated
+
+
+def substep(task, fn):
+    if task:
+        task.update_step(fn.__name__)
+    return fn
