@@ -17,3 +17,11 @@ class EnvTest(IntegrationTest):
         env = config.env()
         self.assert_equal(env('DBS_DEFAULT_PASSWORD'), 'overridden secret value')
         self.assert_equal(env('DBS_DEFAULT_HOST'), 'localhost')
+        value = config.get('dbs.default.not_there', 'default')
+        self.assert_equal(value, 'default')
+        value = config.setdefault('dbs.default.not_there', 'new value')
+        self.assert_equal(value, 'new value')
+        config['dbs.default.second'] = 'old value'
+        self.assert_equal(config.dbs.default.second, 'old value')
+        value = config.setdefault('dbs.default.second', 'new value')
+        self.assert_equal(value, 'old value')
