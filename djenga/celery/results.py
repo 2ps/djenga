@@ -1,3 +1,4 @@
+from typing import List, Dict
 from celery.result import AsyncResult
 
 
@@ -12,6 +13,17 @@ class AsyncDetailedResult(AsyncResult):
                  app=None, parent=None):
         super().__init__(id, backend, task_name, app, parent)
 
-    def details(self):
+    def details(self) -> List[Dict]:
+        """
+        Returns a list of dictionaries with the following keys:
+          `key`
+          `description`
+          `details`
+          `latest`
+          `time`
+          `done`
+          `error`
+        :return:
+        """
         meta = self._get_task_meta()
         return meta.get('details') if meta else []

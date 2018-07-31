@@ -1,4 +1,4 @@
-# detail tasks
+# detail tasks (aka yakkety tasks)
 
 One of the problems that we've encountered with celery is
 that we want to provide the user a lot more information 
@@ -8,12 +8,12 @@ what is going on in the background.  For customers, this
 is extremely helpful because it indicates that their request
 is being processed.  For your internal agents / business users,
 this is a vital tool to assist in debugging.  To that end,
-we've "extended" (ed., wasn't it really hacked into) celery
+we've "extended" (ed., wasn't it really hacked into?) celery
 to provide a `Task` base class that allows you to provide 
-much more detail to the user as a task is executing.  That
-said, hooking all the pieces together to get this working 
-can be a bit overwhelming.  You'll be using the 
-following classes and functions for all of this to work:
+much more detail to the user as a task is executing.  Hooking 
+all the pieces together to get this working  can be a bit 
+overwhelming.  You'll be using the following classes and 
+functions for all of this to work:
 
 * **`djenga.celery.tasks.DetailTask`**: Base `Task` class 
   that provides helper functions for adding detailed 
