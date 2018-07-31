@@ -66,6 +66,46 @@ class IntegrationTest(object):
         with open(self.test_data_file, 'r') as f:
             self.test_data = yaml.load(f)
 
+    def assert_true(self, value, message=''):
+        if value is not True:
+            raise IntegrationTestException(
+                message or f'failure: [{value}] was not true')
+
+    def assert_truthy(self, value, message=''):
+        if value:
+            raise IntegrationTestException(
+                message or f'failure: [{value}] was not truthy')
+
+    def assert_false(self, value, message=''):
+        if value is not False:
+            raise IntegrationTestException(
+                message or f'failure: [{value}] was true')
+
+    def assert_falsey(self, value, message=''):
+        if value:
+            raise IntegrationTestException(
+                message or f'failure: [{value}] was not falsey')
+
+    def asset_greater_than(self, left, right, message=''):
+        if left <= right:
+            raise IntegrationTestException(
+                message or f'failure: [{left}] <= [{right}]')
+
+    def asset_greater_than_equal(self, left, right, message=''):
+        if left <= right:
+            raise IntegrationTestException(
+                message or f'failure: [{left}] > [{right}]')
+
+    def assert_less_than(self, left, right, message=''):
+        if left >= right:
+            raise IntegrationTestException(
+                message or f'failure: [{left}] >= [{right}]')
+
+    def assert_less_than_equal(self, left, right, message=''):
+        if left > right:
+            raise IntegrationTestException(
+                message or f'failure: [{left}] > [{right}]')
+
     def assert_equal(self, left, right, message=''):
         if left != right:
             raise IntegrationTestException(
