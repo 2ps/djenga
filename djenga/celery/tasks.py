@@ -43,6 +43,7 @@ class TaskDetail:
             'details': self.detail,
             'latest': self.detail[-1] if self.detail else None,
             'time': self.millis,
+            'error': self.error,
             'done': self.done,
         }
 
