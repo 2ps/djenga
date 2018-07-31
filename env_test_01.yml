@@ -1,0 +1,4 @@
+---
+dbs.default.username: user
+dbs.default.host: localhost
+dbs.default.port: 3306
