@@ -9,7 +9,7 @@ try:
 except ImportError:
     bdist_wheel = None
 
-version = '0.8.1'
+version = '0.8.2'
 
 setup(name='djenga',
       version=version,
@@ -43,7 +43,7 @@ Useful building blocks for Django.""",
           'cssutils==1.0',
           'beautifulsoup4>=4.3.2',
           'pynliner>=0.8.0',
-          'pycryptodome>=3.6.1',
+          'pycryptodome>=3.6.6',
           'pytz',
           'python-dateutil',
           'pyyaml',
