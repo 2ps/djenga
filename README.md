@@ -9,5 +9,5 @@ Table of contents
 
 1.  [debugging in pycharm / windows](docs/windows_debugging.md)
 2.  [celery detail tasks](docs/detail_tasks.md)
-    
+3.  [secrets management](docs/secrets.md)    
 

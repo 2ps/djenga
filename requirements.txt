@@ -1,8 +1,8 @@
-Django==1.11.6
-cssutils==1.0
-beautifulsoup4==4.6.0
+Django>=1.11.6
+cssutils>=1.0
+beautifulsoup4>=4.6.0
 pynliner==0.8.0
-pycryptodome==3.6.6
+pycryptodome>=3.6.6
 pytz
 psutil
 python-dateutil
@@ -10,9 +10,11 @@ pyyaml
 twine
 six
 django-redis-cache
-celery>=4.1.0
+celery>=4.2.1
 django-extensions
 ipython
 setuptools
 wheel
-
+boto3
+awscli
+requests
