@@ -9,7 +9,7 @@ try:
 except ImportError:
     bdist_wheel = None
 
-version = '0.8.4'
+version = '0.8.5j'
 
 setup(name='djenga',
       version=version,
@@ -51,9 +51,15 @@ Useful building blocks for Django.""",
           'celery>=4.1.0',
           'boto3',
           'requests>=2.19',
+          'gnupg',
+          'gitpython',
       ] + ([ 'psutil' ] if 'cygwin' in sys.platform else []),
       entry_points={
           'console_scripts': [
               'kms_wrap=djenga.encryption.kms_wrap:main',
+              'init_secrets=djenga.encryption.init_secrets:main',
+              # 'add_user=djenga.encryption.add_user:main',
+              # 'add_user=djenga.encryption.add_secret:main',
+              # 'rm_user=djenga.encryption.rm_user:main',
           ],
       })

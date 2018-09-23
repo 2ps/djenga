@@ -13,10 +13,16 @@ def flush_print(st, *args, **kwargs):
         sys.stdout.flush()
 
 
-def cprint(color_fn, st, *args):
+def cprint(st, *args, **kwargs):
+    color = kwargs.get('color')
+    if color and color not in COLORS:
+        color = None
+    style = kwargs.get('style')
+    if style and style not in STYLES:
+        style = None
     if args:
         st = st % args
-    print(color_fn(st), end='')
+    print(colorize(st, fg=color, style=style), end=kwargs.get('end', ''))
     sys.stdout.flush()
 
 
@@ -25,7 +31,7 @@ def dot_lead(st, *args, **kwargs):
     if args:
         st = st % args
     dots = '.' * (width - len(st))
-    return '%s%s' % (st, dots)
+    return f'{st}{dots}'
 
 
 def dot_leader(st, *args, **kwargs):
@@ -45,36 +51,36 @@ STYLES = (
     'concealed', 'crossed')
 
 
-def color(s, fg=None, bg=None, style=None):
+def colorize(s, fg=None, bg=None, style=None):
     sgr = []
 
     if fg:
         if fg in COLORS:
-            sgr.append('%s' % (30 + COLORS.index(fg),))
+            sgr.append(f'{30 + COLORS.index(fg)}')
         elif isinstance(fg, int) and 0 <= fg <= 255:
-            sgr.append('38;5;%d' % int(fg))
+            sgr.append(f'38;5;{fg}')
         else:
-            raise Exception('Invalid color [%s]' % fg)
+            raise Exception(f'Invalid color [{fg}]')
 
     if bg:
         if bg in COLORS:
-            sgr.append(str(40 + COLORS.index(bg)))
+            sgr.append(f'{40 + COLORS.index(bg)}')
         elif isinstance(bg, int) and 0 <= bg <= 255:
-            sgr.append('48;5;%d' % bg)
+            sgr.append(f'48;5;{bg}')
         else:
-            raise Exception('Invalid color "%s"' % bg)
+            raise Exception(f'Invalid color "{bg}"')
 
     if style:
         for st in style.split('+'):
             if st in STYLES:
                 sgr.append(str(1 + STYLES.index(st)))
             else:
-                raise Exception('Invalid style "%s"' % st)
+                raise Exception(f'Invalid style "{st}"')
 
     if sgr:
         prefix = '\x1b[' + ';'.join(sgr) + 'm'
         suffix = '\x1b[0m'
-        return prefix + s + suffix
+        return f'{prefix}{s}{suffix}'
     else:
         return s
 
@@ -84,22 +90,46 @@ def strip_color(s):
 
 
 # Foreground shortcuts
-black = partial(color, fg='black')
-red = partial(color, fg='red')
-green = partial(color, fg='green')
-yellow = partial(color, fg='yellow')
-blue = partial(color, fg='blue')
-magenta = partial(color, fg='magenta')
-cyan = partial(color, fg='cyan')
-white = partial(color, fg='white')
+black = partial(colorize, fg='black')
+red = partial(colorize, fg='red')
+green = partial(colorize, fg='green')
+yellow = partial(colorize, fg='yellow')
+blue = partial(colorize, fg='blue')
+magenta = partial(colorize, fg='magenta')
+cyan = partial(colorize, fg='cyan')
+white = partial(colorize, fg='white')
 
 # Style shortcuts
-bold = partial(color, style='bold')
-faint = partial(color, style='faint')
-italic = partial(color, style='italic')
-underline = partial(color, style='underline')
-blink = partial(color, style='blink')
-blink2 = partial(color, style='blink2')
-negative = partial(color, style='negative')
-concealed = partial(color, style='concealed')
-crossed = partial(color, style='crossed')
+bold = partial(colorize, style='bold')
+faint = partial(colorize, style='faint')
+italic = partial(colorize, style='italic')
+underline = partial(colorize, style='underline')
+blink = partial(colorize, style='blink')
+blink2 = partial(colorize, style='blink2')
+negative = partial(colorize, style='negative')
+concealed = partial(colorize, style='concealed')
+crossed = partial(colorize, style='crossed')
+
+
+def notice(st, lead_length=50, st_color=None):
+    while len(st) > lead_length - 2:
+        lead_length += 10
+    f = dot_lead(st, width=lead_length)
+    if st_color in COLORS:
+        f = colorize(f, fg=st_color)
+    flush_print(f, end='')
+
+
+def notice_end(st=None, *args, **kwargs):
+    if st:
+        st_color = kwargs.get('color')
+        st_style = kwargs.get('style')
+        if st_color not in COLORS:
+            st_color = 'yellow'
+        if st_style not in STYLES:
+            st_style = None
+        flush_print(colorize(st, fg=st_color, style=st_style), *args, end='\n')
+    else:
+        flush_print('OK')
+
+
