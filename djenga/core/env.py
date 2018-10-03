@@ -10,6 +10,7 @@ from .bunch import Bunch
 
 __all__ = [
     'ConfigBunch',
+    'KmsBunch',
 ]
 logger = logging.getLogger(__name__)
 
