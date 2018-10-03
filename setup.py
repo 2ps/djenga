@@ -28,7 +28,7 @@ Useful building blocks for Django.""",
           'Framework :: Django :: 1.9',
           'License :: OSI Approved :: BSD License',
       ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-        cmdclass={'bdist_wheel': bdist_wheel},
+      cmdclass={'bdist_wheel': bdist_wheel},
       keywords='django python',
       author='Preetam Shingavi',
       author_email='p.shingavi@yahoo.com',
