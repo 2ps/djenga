@@ -1,6 +1,7 @@
 from collections import OrderedDict, defaultdict
 import logging
 import os
+import re
 from typing import Any
 from typing import List
 from typing import Dict
@@ -69,12 +70,16 @@ class ConfigBunch(Bunch):
     def get(self, key, default=None):
         pieces = key.split('.')
         parent = self.walk_to_parent(pieces)
-        return getattr(parent, key, default)
+        if parent:
+            return getattr(parent, pieces[-1], default)
+        return default
 
     def __getitem__(self, key):
         pieces = key.split('.')
         parent = self.walk_to_parent(pieces)
-        return getattr(parent, key)
+        if parent:
+            return getattr(parent, pieces[-1])
+        raise KeyError(f'{key} not found in config')
 
     def __setitem__(self, key, value):
         pieces = key.split('.')
@@ -91,10 +96,12 @@ class ConfigBunch(Bunch):
         return value
 
     def env(self):
+        splitter = re.compile(r'[_.]')
+
         def fn(key, default=None):
             value = os.environ.get(key)
             if not value:
-                pieces = key.lower().split('_')
+                pieces = splitter.split(key.lower())
                 parent: ConfigBunch = self.walk_to_parent(pieces)
                 if not isinstance(parent, ConfigBunch):
                     return None
