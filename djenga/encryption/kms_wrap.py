@@ -49,7 +49,7 @@ def main():
         sys.stderr.flush()
     stdin = os.fdopen(sys.stdin.fileno(), 'rb', 0)
     plain_text = stdin.readline()
-    plain_text = plain_text.decode('utf-8').rstrip('\n')
+    plain_text = plain_text.decode('utf-8').rstrip()
     value = encrypt(
         plain_text,
         alias=args.key,
