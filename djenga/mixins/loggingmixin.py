@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import logging
 import codecs
 import sys
+from traceback import format_exc
 from django.conf import settings
 from django.core.management.base import OutputWrapper
 
@@ -124,8 +125,8 @@ class LoggingMixin(object):
         self.llog(logging.ERROR, format_string, *args)
 
     def exception(self, format_string, *args):
-        p_type, p_exception, p_traceback = sys.exc_info()
+        p_type, p_exception, _ = sys.exc_info()
         self.llog(logging.ERROR, format_string, *args)
         self.llog(logging.ERROR, u'Exception message: %s', p_exception)
         self.llog(logging.ERROR, u'Exception type   : %s', p_type)
-        self.llog(logging.ERROR, u'Traceback\n%s', p_traceback.format_exc())
+        self.llog(logging.ERROR, u'Traceback\n%s', format_exc())
