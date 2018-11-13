@@ -35,7 +35,7 @@ class LoggingMixin(object):
                 self.stdout = OutputWrapper(self.stdout._out, ending='')
             except AttributeError:
                 self.stdout = OutputWrapper(sys.stdout, ending='')
-            self.stdout = codecs.getwriter('utf8')(self.stdout)
+            # self.stdout = codecs.getwriter('utf8')(self.stdout)
             self.logging_initialized = True
 
     def color_format(self, level, message):
