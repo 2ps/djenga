@@ -1,10 +1,12 @@
 from collections import OrderedDict, defaultdict
+from functools import partial
 import logging
 import os
 import re
 from typing import Any
 from typing import List
 from typing import Dict
+from typing import Union
 import yaml
 from .bunch import Bunch
 
@@ -12,6 +14,8 @@ from .bunch import Bunch
 __all__ = [
     'ConfigBunch',
     'KmsBunch',
+    'LazySecret',
+    'LazyKmsBunch',
 ]
 logger = logging.getLogger(__name__)
 
@@ -148,3 +152,53 @@ class KmsBunch(ConfigBunch):
             return decrypt(values, region=self.region, profile=self.profile)
         except:
             return values
+
+
+class LazySecret:
+    def __init__(self, value=None, decrypt_fn=None):
+        self.decrypted = False
+        self.value = value
+        self.decrypt = decrypt_fn
+
+    def get(self):
+        return self.decrypt(self.value)
+
+
+class LazyKmsBunch(ConfigBunch):
+    def __init__(self, *filenames: str, **kwargs):
+        """
+        initialize with a list of files to be
+        read, in order.  nested dicts
+        are not supported, but you can
+        use dotted key names to achieve the same effect.
+        :type filenames: List[str]
+        :type kms_key_id: str
+        :type profile: str
+        :type region: str
+        """
+        from djenga.encryption.kms_wrapped import decrypt
+        super().__init__()
+        self.profile: str = kwargs.get('profile', None)
+        self.region: str = kwargs.get('region', None)
+        self.decrypt_fn = partial(decrypt, region=self.region, profile=self.profile)
+        for x in filenames:
+            try:
+                with open(x, 'r') as f:
+                    logger.debug('[djenga]  loading settings from [%s]', x)
+                    values = self.load_file(f)
+                    values = self.lazy_wrap(values)
+                    self.assimilate_values(values)
+            except FileNotFoundError:
+                logger.debug('[djenga]  file [%s] was not found, skipping.', x)
+
+    def lazy_wrap(self, values: Union[Dict, List, str]):
+        if isinstance(values, list) or isinstance(values, tuple):
+            return [ self.lazy_wrap(x) for x in values ]
+        if isinstance(values, dict) or isinstance(values, OrderedDict) or isinstance(values, defaultdict):
+            return {
+                key: self.lazy_wrap(value)
+                for key, value in values.items()
+            }
+        if isinstance(values, str) and values.count('|') == 4:
+            return LazySecret(values, self.decrypt_fn)
+        return values
