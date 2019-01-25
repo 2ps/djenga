@@ -40,7 +40,7 @@ class StatusCommand(BaseCommand):
             name=self.command_name,
             defaults={
                 'last_run': datetime.now(timezone.utc),
-                'task_status': 'running',
+                'status': 'running',
             }
         )
 
