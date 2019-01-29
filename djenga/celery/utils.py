@@ -1,6 +1,7 @@
 # encoding: utf-8
 from functools import wraps
 import logging
+from celery.signals import worker_process_init
 
 
 __all__ = [
@@ -9,6 +10,7 @@ __all__ = [
     'unbound_step',
     'substep',
     'json_logging',
+    'mark_celery_running',
 ]
 logger = logging.getLogger(__name__)
 
@@ -105,6 +107,22 @@ def substep(task, fn):
     return fn
 
 
+def json_formatter(
+        sender, logger: logging.Logger, loglevel, logfile,
+        format, colorize, **kw):
+    from djenga.logging import JsonFormatter
+    for h in logger.handlers:
+        h.formatter = JsonFormatter()
+
+
+def json_task_formatter(
+        sender, logger: logging.Logger, loglevel, logfile,
+        format, colorize, **kw):
+    from djenga.logging import JsonTaskFormatter
+    for h in logger.handlers:
+        h.formatter = JsonTaskFormatter()
+
+
 def json_logging():
     """
     Initializes the celery logging so that it uses
@@ -112,23 +130,14 @@ def json_logging():
     """
     from celery.signals import after_setup_logger
     from celery.signals import after_setup_task_logger
-    from djenga.logging import JsonFormatter
-    from djenga.logging import JsonTaskFormatter
-
-    def json_formatter(
-            sender, logger: logging.Logger, loglevel, logfile,
-            format, colorize, **kw):
-        for h in logger.handlers:
-            h.formatter = JsonFormatter()
-
-    def json_task_formatter(
-            sender, logger: logging.Logger, loglevel, logfile,
-            format, colorize, **kw):
-        for h in logger.handlers:
-            h.formatter = JsonTaskFormatter()
 
     after_setup_logger.connect(json_formatter)
     after_setup_task_logger.connect(json_task_formatter)
+
+
+def _mark_celery_running(sender, **kwargs):
+    from django.conf import settings
+    settings.IS_CELERY_RUNNING = True
 
 
 def mark_celery_running():
@@ -136,10 +145,4 @@ def mark_celery_running():
     marks celery as running by setting the `IS_CELERY_RUNNING`
     flag in the `django.conf` `settings` object.
     """
-    from celery.signals import worker_process_init
-
-    def handler(sender, **kwargs):
-        from django.conf import settings
-        settings.IS_CELERY_RUNNING = True
-
-    worker_process_init.connect(handler)
+    worker_process_init.connect(_mark_celery_running)
