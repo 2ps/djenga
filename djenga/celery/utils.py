@@ -8,6 +8,7 @@ __all__ = [
     'auto_step',
     'unbound_step',
     'substep',
+    'json_logging',
 ]
 logger = logging.getLogger(__name__)
 
@@ -102,3 +103,31 @@ def substep(task, fn):
     if task:
         task.update_step(fn.__name__)
     return fn
+
+
+def json_logging():
+    """
+    Initializes the celery logging so that it uses
+    our custom json formatter.
+    """
+    from celery.signals import after_setup_logger
+    from celery.signals import after_setup_task_logger
+    from djenga.logging import JsonFormatter
+    from djenga.logging import JsonTaskFormatter
+
+    def json_formatter(
+            sender, logger: logging.Logger, loglevel, logfile,
+            format, colorize, **kw):
+        for h in logger.handlers:
+            h.formatter = JsonFormatter()
+
+    def json_task_formatter(
+            sender, logger: logging.Logger, loglevel, logfile,
+            format, colorize, **kw):
+        for h in logger.handlers:
+            h.formatter = JsonTaskFormatter()
+
+    after_setup_logger.connect(json_formatter)
+    after_setup_task_logger.connect(json_task_formatter)
+
+
