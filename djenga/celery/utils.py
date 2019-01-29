@@ -131,3 +131,15 @@ def json_logging():
     after_setup_task_logger.connect(json_task_formatter)
 
 
+def mark_celery_running():
+    """
+    marks celery as running by setting the `IS_CELERY_RUNNING`
+    flag in the `django.conf` `settings` object.
+    """
+    from celery.signals import worker_process_init
+
+    def handler(sender, **kwargs):
+        from django.conf import settings
+        settings.IS_CELERY_RUNNING = True
+
+    worker_process_init.connect(handler)
