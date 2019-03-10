@@ -116,6 +116,12 @@ class IntegrationTest(object):
             raise IntegrationTestException(
                 message or 'failure: [%s] == [%s]' % (left, right))
 
+    def setup(self):
+        pass
+
+    def teardown(self):
+        pass
+
     def run_test(self):
         test_methods = [
             value
@@ -124,20 +130,28 @@ class IntegrationTest(object):
         ]
         test_methods.sort(key=lambda fn: fn.__name__)
         all_passed = True
-        for x in test_methods:
-            dot_leader('%s.%s', self.__class__.__name__, x.__name__, end='')
-            tm_start = time()
-            status = 'passed'
-            units = 's'
-            try:
-                x()
-            except IntegrationTestException as ex:
-                status = 'failed (%s)' % (ex,)
-                all_passed = False
-            finally:
-                tm_total = time() - tm_start
-            if tm_total < 1:
-                tm_total *= 1000
-                units = 'ms'
-            flush_print('%s %.1f%s', status, tm_total, units)
+        dot_leader('%s.setup', self.__class__.__name__, end='')
+        self.setup()
+        flush_print('done')
+        try:
+            for x in test_methods:
+                dot_leader('%s.%s', self.__class__.__name__, x.__name__, end='')
+                tm_start = time()
+                status = 'passed'
+                units = 's'
+                try:
+                    x()
+                except IntegrationTestException as ex:
+                    status = 'failed (%s)' % (ex,)
+                    all_passed = False
+                finally:
+                    tm_total = time() - tm_start
+                if tm_total < 1:
+                    tm_total *= 1000
+                    units = 'ms'
+                flush_print('%s %.1f%s', status, tm_total, units)
+        finally:
+            dot_leader('%s.teardown', self.__class__.__name__, end='')
+            self.teardown()
+            flush_print('done')
         return all_passed
