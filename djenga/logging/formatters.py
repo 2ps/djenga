@@ -45,7 +45,7 @@ class JsonFormatter(logging.Formatter):
 
     def to_dict(self, record: logging.LogRecord):
         data = {
-            '@timestamp': self.iso_time(record),
+            'timestamp': self.iso_time(record),
             'message': self.format_message(record),
             'function': record.funcName,
             'path': record.pathname,
