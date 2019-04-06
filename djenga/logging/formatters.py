@@ -15,7 +15,7 @@ class JsonFormatter(logging.Formatter):
     json-based centralized log aggregation platform like ELK.
     n.b., this formatter is very opinionated.
     """
-    def format_message(self, record: logging.LogRecord):
+    def format_message(self, record: logging.LogRecord):  # noqa: C901
         s = record.getMessage()
         if record.exc_info:
             # Cache the traceback text to avoid converting it multiple times

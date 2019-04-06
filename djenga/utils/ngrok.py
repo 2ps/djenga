@@ -1,11 +1,11 @@
-import requests
 import logging
+import requests
 
 
 __all__ = [
     'get_ngrok_url',
 ]
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def get_ngrok_url():
@@ -25,14 +25,14 @@ def get_ngrok_url():
         data = response.json()
         url = data['tunnels'][0]['public_url']
         url = url.replace('http:', 'https:')
-        logger.info('NGROK URL = %s', url)
-    except:  # noqa: E722
+        log.info('NGROK URL = %s', url)
+    except:  # noqa: E722, pylint: disable=bare-except
         try:
             if response:
                 content = response.content.decode('utf8')
                 x = content.find('https')
                 y = content.find('\\"', x + 1)
                 url = content[x:y]
-        except:  # noqa: E722
+        except:  # noqa: E722, pylint: disable=bare-except
             pass
     return url

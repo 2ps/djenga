@@ -1,11 +1,10 @@
 # encoding: utf-8
-from __future__ import absolute_import
-from djenga.loggers.util import ColorFormatter
-from djenga.loggers.util import BriefColorFormatter
-from djenga.loggers.util import IgnoreCaching
-from djenga.loggers.util import IgnoreDjangoInternals
-from djenga.loggers.util import IgnorePisaPdf
-from djenga.loggers.util import IgnoreRequests
-from djenga.loggers.util import WorldWritableRotatingFileHandler
-from djenga.loggers.filters import *
+from .util import ColorFormatter
+from .util import BriefColorFormatter
+from .util import IgnoreCaching
+from .util import IgnoreDjangoInternals
+from .util import IgnorePisaPdf
+from .util import IgnoreRequests
+from .util import WorldWritableRotatingFileHandler
+from .filters import *
 

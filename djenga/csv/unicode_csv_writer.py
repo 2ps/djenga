@@ -8,7 +8,7 @@ except ImportError:
     from io import StringIO
 
 
-class UnicodeCsvWriter(object):
+class UnicodeCsvWriter:
     def __init__(self, f, dialect=csv.excel, **kwds):
         self.queue = StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)

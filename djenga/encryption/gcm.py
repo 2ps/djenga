@@ -1,16 +1,13 @@
 # encoding: utf-8
 
-from __future__ import unicode_literals
 import logging
-import random
 from base64 import b64decode
 from base64 import b64encode
 from Crypto.Protocol.KDF import PBKDF2 as derive_key
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-from struct import pack
 from django.conf import settings
-from djenga.encryption.helpers import _as_bytes
+from .helpers import _as_bytes
 
 
 __all__ = [

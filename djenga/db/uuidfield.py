@@ -1,7 +1,5 @@
 
 # encoding: utf-8
-
-from __future__ import unicode_literals
 from uuid import UUID
 from django.db.backends.mysql.base import django_conversions
 from django.db import models
@@ -9,7 +7,7 @@ from django.db import models
 
 def prep_uuid(
         o,
-        *args # pylint: disable=unused-argument
+        *args  # pylint: disable=unused-argument
 ):
     return '0x%s' % o.hex
 
@@ -29,8 +27,6 @@ class UuidField(models.fields.Field):
     The related value type of a Uuid field is the `uuid.UUID` class
     from python.
     """
-    __metaclass__ = models.SubfieldBase
-
     def to_python(self, value):
         if isinstance(value, UUID):
             return value
@@ -59,9 +55,11 @@ class UuidField(models.fields.Field):
         return self.get_prep_value(value)
 
     def db_type(self, connection):
-        if connection.settings_dict['ENGINE'] in { 'django.db.backends.mysql', 'django_mysqlpool.backends.mysqlpool' }:
+        supported_engines = {
+            'django.db.backends.mysql',
+            'django_mysqlpool.backends.mysqlpool' }
+        if connection.settings_dict['ENGINE'] in supported_engines:
             return 'binary(16)'
-        else:
-            raise Exception('MySql is the only defined engine for UuidField.')
+        raise Exception('MySql is the only defined engine for UuidField.')
 
 

@@ -19,3 +19,10 @@ boto3
 awscli
 requests
 testfixtures
+coverage
+pytest
+flake8
+pylint
+pylint-django
+mysql-connector-python
+mysqlclient>=1.4.2.post1

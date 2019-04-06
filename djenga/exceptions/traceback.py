@@ -1,11 +1,10 @@
 # encoding: utf-8
 # pylint: disable=pointless-string-statement
 
-from __future__ import unicode_literals
 import sys
 
 
-class FullTraceback(object):
+class FullTraceback:
     def __init__(self, tb_frame, tb_lineno, tb_next):
         self.tb_frame = tb_frame
         self.tb_lineno = tb_lineno
@@ -15,11 +14,11 @@ class FullTraceback(object):
 def current_stack(skip=0):
     p_frame = None
     try:
-        1/0
+        1 / 0
     except ZeroDivisionError:
         p_frame = sys.exc_info()[2].tb_frame
 
-    for _ in xrange(skip + 2):
+    for _ in range(0, skip + 2):
         p_frame = p_frame.f_back
     rg_frames = []
     while p_frame is not None:

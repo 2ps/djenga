@@ -2,7 +2,10 @@
 Encrypts secrets using kms key wrapping.
 
 Usage:
-  kms_wrap [--region=<region_name>] [--profile=<profile name>] --key <key_alias_or_id>
+  kms_wrap
+    [--region=<region_name>]
+    [--profile=<profile name>]
+    --key <key_alias_or_id>
 
 Options:
   -r --region=<region_name>    AWS Region Name
@@ -12,7 +15,7 @@ Options:
 from argparse import ArgumentParser
 import os
 import sys
-from djenga.encryption.kms_wrapped import encrypt
+from .kms_wrapped import encrypt
 
 
 def get_parser():
@@ -45,7 +48,7 @@ def main():
     args = parser.parse_args()
     # do not print prompt if input is being piped
     if sys.stdin.isatty():
-        print('Enter plaintext: ', end='', file=sys.stderr),
+        print('Enter plaintext: ', end='', file=sys.stderr)
         sys.stderr.flush()
     stdin = os.fdopen(sys.stdin.fileno(), 'rb', 0)
     plain_text = stdin.readline()

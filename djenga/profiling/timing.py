@@ -1,7 +1,6 @@
 # encoding: utf-8
 # pylint: disable=pointless-string-statement
 
-from __future__ import unicode_literals
 import threading
 from time import time
 from django.db import connections
@@ -44,8 +43,8 @@ def end_timer():
         '%s%s took %.1fms',
         '-' * (len(stack) + 1),
         name,
-        1000 * (tm_end-tm_start)
+        1000 * (tm_end - tm_start)
     )
     if count_queries:
         queries_end = query_count()
-        logger.info('Query count: %d', queries_end-queries)
+        logger.info('Query count: %d', queries_end - queries)

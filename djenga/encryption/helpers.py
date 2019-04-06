@@ -1,8 +1,8 @@
 from base64 import b64encode
 from base64 import b64decode
-import six
 from threading import local
 import boto3
+import six
 
 
 __all__ = [
@@ -33,7 +33,7 @@ def from_b64_str(value: str):
     return b64decode(value)
 
 
-def _get_client(region: str=None, profile: str=None):
+def _get_client(region: str = None, profile: str = None):
     key = f'{region}-{profile}'
     client = thread_local.sessions.get(key)
     if not client:

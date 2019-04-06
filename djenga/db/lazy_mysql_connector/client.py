@@ -1,16 +1,16 @@
 import subprocess
-
 from mysql.connector.django.client import DatabaseClient as ParentClient
 
 
 class DatabaseClient(ParentClient):
-    @classmethod
+    @classmethod    # noqa: C901
     def settings_to_cmd_args(cls, settings_dict):
-        from djenga.core import LazySecret
+        from ...core import LazySecret
         args = [cls.executable_name]
         db = settings_dict['OPTIONS'].get('db', settings_dict['NAME'])
         user = settings_dict['OPTIONS'].get('user', settings_dict['USER'])
-        passwd = settings_dict['OPTIONS'].get('passwd', settings_dict['PASSWORD'])
+        passwd = settings_dict['OPTIONS'].get(
+            'passwd', settings_dict['PASSWORD'])
         host = settings_dict['OPTIONS'].get('host', settings_dict['HOST'])
         port = settings_dict['OPTIONS'].get('port', settings_dict['PORT'])
         server_ca = settings_dict['OPTIONS'].get('ssl', {}).get('ca')
@@ -45,5 +45,6 @@ class DatabaseClient(ParentClient):
         return args
 
     def runshell(self):
-        args = DatabaseClient.settings_to_cmd_args(self.connection.settings_dict)
+        args = DatabaseClient.settings_to_cmd_args(
+            self.connection.settings_dict)
         subprocess.check_call(args)

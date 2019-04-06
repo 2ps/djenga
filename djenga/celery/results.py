@@ -8,10 +8,10 @@ __all__ = [
 
 
 class AsyncDetailedResult(AsyncResult):
-    def __init__(self, id, backend=None,
+    def __init__(self, st_id, backend=None,
                  task_name=None,            # deprecated
                  app=None, parent=None):
-        super().__init__(id, backend, task_name, app, parent)
+        super().__init__(st_id, backend, task_name, app, parent)
 
     def details(self) -> List[Dict]:
         """

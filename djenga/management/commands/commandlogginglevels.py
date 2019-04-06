@@ -1,5 +1,4 @@
-
-#This file uses the following encoding: utf-8
+# encoding: utf-8
 
 
 import logging
@@ -10,7 +9,8 @@ __all__ = [
     u'is_ducktyped_logger',
 ]
 
-class VerbosityLevels(object):
+
+class VerbosityLevels:
     SUMMARY = 0
     ERROR = 1
     WARNING = 2
@@ -25,7 +25,8 @@ class VerbosityLevels(object):
 
     @staticmethod
     def to_logging_level(verbosity):
-        return VerbosityLevels.VERBOSITY_TO_LOGGING.get(verbosity, logging.DEBUG)
+        return VerbosityLevels.VERBOSITY_TO_LOGGING.get(
+            verbosity, logging.DEBUG)
 
 
 def is_ducktyped_logger(log):

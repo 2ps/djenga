@@ -12,7 +12,7 @@ __all__ = [
     'json_logging',
     'mark_celery_running',
 ]
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def update_progress(task, progress, *args, **kwargs):
@@ -42,7 +42,7 @@ def update_progress(task, progress, *args, **kwargs):
     for key, value in kwargs.items():
         values[key] = value
     setattr(task.request, 'info', values)
-    logger.info(progress)
+    log.info(progress)
 
 
 def auto_step(key, description=None,
@@ -109,16 +109,16 @@ def substep(task, fn):
 
 def json_formatter(
         sender, logger: logging.Logger, loglevel, logfile,
-        format, colorize, **kw):
-    from djenga.logging import JsonFormatter
+        st_format, colorize, **kw):
+    from ..logging import JsonFormatter
     for h in logger.handlers:
         h.formatter = JsonFormatter()
 
 
 def json_task_formatter(
         sender, logger: logging.Logger, loglevel, logfile,
-        format, colorize, **kw):
-    from djenga.logging import JsonTaskFormatter
+        st_format, colorize, **kw):
+    from ..logging import JsonTaskFormatter
     for h in logger.handlers:
         h.formatter = JsonTaskFormatter()
 

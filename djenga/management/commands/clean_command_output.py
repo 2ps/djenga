@@ -1,11 +1,14 @@
 
-from djenga.management.commands import StatusCommand
-from djenga.models import ManagementCommand
-from djenga.models import CommandOutput
+from .statuscommand import StatusCommand
+from ...models import ManagementCommand
+from ...models import CommandOutput
 
 
 class Command(StatusCommand):
-    help = 'Cleans up the djenga.models.CommandOutput values by removing old entries'
+    help = (
+        'Cleans up the djenga.models.CommandOutput '
+        'values by removing old entries'
+    )
 
     def __init__(self):
         super(Command, self).__init__()
@@ -41,7 +44,7 @@ class Command(StatusCommand):
             self.clean_command(x.id)
             self.color_log(self.style.SUCCESS, 'Done.\n')
 
-    def handle(self, keep, *args, **options):
+    def handle(self, keep, *args, **options):  # pylint: disable=W0221
         self.keep = keep
         self.load_commands()
         self.clean_commands()

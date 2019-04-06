@@ -16,7 +16,6 @@ Decimal('1.9956')
 # encoding: utf-8
 
 
-from __future__ import unicode_literals
 from decimal import Decimal
 from decimal import ROUND_FLOOR
 from decimal import ROUND_DOWN
@@ -110,7 +109,7 @@ DecimalLike = TypeVar('DecimalLike', str, float, Decimal)
 
 def q_round(
         amount: DecimalLike,
-        places: int=2,
+        places: int = 2,
         rounding=ROUND_HALF_UP) -> Decimal:
     """
     Useful helper function that takes a numerical amount, converts
@@ -134,7 +133,7 @@ def q_round(
     return amount
 
 
-def round_up(amount: DecimalLike, places: int=2) -> Decimal:
+def round_up(amount: DecimalLike, places: int = 2) -> Decimal:
     """
     Rounds amount up, to a specified number of places
     :type amount: float | str | decimal.Decimal
@@ -160,7 +159,7 @@ def round_down(amount, places=2):
     return q_round(amount, places, ROUND_DOWN)
 
 
-def round_floor(amount: DecimalLike, places: int=2) -> Decimal:
+def round_floor(amount: DecimalLike, places: int = 2) -> Decimal:
     """
     Floor rounds amount to a specified number of places
     :type amount: float | str | decimal.Decimal
@@ -174,7 +173,7 @@ def round_floor(amount: DecimalLike, places: int=2) -> Decimal:
     return q_round(amount, places, ROUND_FLOOR)
 
 
-def round_half_up(amount: DecimalLike, places: int=2) -> Decimal:
+def round_half_up(amount: DecimalLike, places: int = 2) -> Decimal:
     """
     Rounds amount, to a specified number of places, using half-rounding
     :type amount: float | str | decimal.Decimal

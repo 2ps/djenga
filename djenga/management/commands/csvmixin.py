@@ -1,8 +1,7 @@
-import codecs
-from djenga.csv import UnicodeCsvWriter
+from ...csv import UnicodeCsvWriter
 
 
-class CsvMixin(object):
+class CsvMixin:
     """
     Enhances a django management command by allowing it to
     write to a CSV file through an
@@ -46,7 +45,8 @@ class CsvMixin(object):
         """
         if not self.csv_writer:
             if self.output_file:
-                self.file_handle = codecs.open(self.output_file, 'w', encoding='utf-8')
+                self.file_handle = open(
+                    self.output_file, 'w', encoding='utf-8')
             else:
                 self.file_handle = self.stdout
             self.csv_writer = UnicodeCsvWriter(self.file_handle)

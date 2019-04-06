@@ -1,15 +1,15 @@
 import inspect
-import yaml
 from time import time
-from djenga.utils import flush_print
-from djenga.utils.print_utils import dot_leader
+import yaml
+from ..utils import flush_print
+from ..utils.print_utils import dot_leader
 
 
 class IntegrationTestException(Exception):
     pass
 
 
-class IntegrationTest(object):
+class IntegrationTest:
     """
     Subclass this class to use for running integration
     tests with the IntegrationTestCommand.  In order
@@ -135,7 +135,7 @@ class IntegrationTest(object):
         flush_print('done')
         try:
             for x in test_methods:
-                dot_leader('%s.%s', self.__class__.__name__, x.__name__, end='')
+                dot_leader(f'{self.__class__.__name__}.{x.__name__}', end='')
                 tm_start = time()
                 status = 'passed'
                 units = 's'

@@ -1,6 +1,6 @@
 
-from .dictionary import ADJECTIVES, ANIMALS
 import random
+from .dictionary import ADJECTIVES, ANIMALS
 
 
 __all__ = [ 'animal_pair' ]

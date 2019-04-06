@@ -1,16 +1,12 @@
 # encoding: utf-8
-
-
-from __future__ import unicode_literals
 import logging
-import codecs
 import sys
 from traceback import format_exc
 from django.conf import settings
 from django.core.management.base import OutputWrapper
 
 
-class LoggingMixin(object):
+class LoggingMixin:
     verbosity = 3 if settings.DEBUG else 1
     """@type: int"""
     indent = 0
@@ -41,19 +37,23 @@ class LoggingMixin(object):
 
     def color_format(self, level, message):
         level_colors = {
-            # Level and a pair of colors: first for the label, the rest for the text;
-            #   the bolder color label can make them easier to spot in the console log.
-            logging.DEBUG:        ( 33,  39),
+            # Level and a pair of colors: first for the label,
+            # the rest for the text;
+            #   the bolder color label can make them easier to spot
+            #   in the console log.
+            logging.DEBUG: (33, 39),
             # logging.TRACE:        (147, 153),
-            logging.INFO:         ( 43,  49),
-            logging.WARNING:      (214, 226),
-            logging.ERROR:        (196, 197),
-            logging.CRITICAL:     (196, 197),
+            logging.INFO: (43, 49),
+            logging.WARNING: (214, 226),
+            logging.ERROR: (196, 197),
+            logging.CRITICAL: (196, 197),
         }.get(level, (33, 39))
-        color   = "\033[38;5;{:d}m"         # 256-color to give wider spectrum than just ANSI
-        reset   = "\033[0m"
+        # 256-color to give wider spectrum than just ANSI
+        color = "\033[38;5;{:d}m"
+        reset = "\033[0m"
 
-        # Pass any simple messages from internal things, like Django's runserver, without special formatting.
+        # Pass any simple messages from internal things, like Django's
+        # runserver, without special formatting.
         mp_levels = {
             logging.INFO: u'INF',
             logging.WARNING: u'WRN',
@@ -64,10 +64,10 @@ class LoggingMixin(object):
         st_level = mp_levels[level]
         level_prefix = '%s[%s] ' % (color.format(level_colors[0]), st_level)
         return u'{level_prefix}{color_normal}{message}{reset}'.format(
-            level_prefix    = level_prefix if self.print_level else '',
-            message         = message,
-            color_normal    = color.format(level_colors[1]),
-            reset           = reset
+            level_prefix=level_prefix if self.print_level else '',
+            message=message,
+            color_normal=color.format(level_colors[1]),
+            reset=reset
         )
 
     def llog(self, logging_level, format_string, *args):
@@ -95,7 +95,8 @@ class LoggingMixin(object):
                 self.initialize_logging()
                 self.stdout.write(u' ' * self.indent)
                 if self.stdout.isatty():
-                    self.stdout.write(self.color_format(logging_level, message))
+                    self.stdout.write(self.color_format(
+                        logging_level, message))
                 else:
                     self.stdout.write(message)
                 self.stdout.write('\n')

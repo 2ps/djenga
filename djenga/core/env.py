@@ -40,7 +40,7 @@ class ConfigBunch(Bunch):
                 logger.debug('[djenga]  file [%s] was not found, skipping.', x)
 
     def load_file(self, f):
-        values: Dict[str, Any] = yaml.load(f)
+        values: Dict[str, Any] = yaml.load(f, yaml.SafeLoader)
         return values
 
     def assimilate_values(self, values):
@@ -113,6 +113,10 @@ class ConfigBunch(Bunch):
             return value
         return fn
 
+    @staticmethod
+    def isdict(values):
+        return isinstance(values, (dict, OrderedDict, defaultdict))
+
 
 class KmsBunch(ConfigBunch):
     def __init__(self, *filenames: str, **kwargs):
@@ -140,17 +144,17 @@ class KmsBunch(ConfigBunch):
                 logger.debug('[djenga]  file [%s] was not found, skipping.', x)
 
     def decrypt(self, values):
-        from djenga.encryption.kms_wrapped import decrypt
-        if isinstance(values, list) or isinstance(values, tuple):
+        from ..encryption.kms_wrapped import decrypt
+        if isinstance(values, (list, tuple)):
             return [ self.decrypt(x) for x in values ]
-        if isinstance(values, dict) or isinstance(values, OrderedDict) or isinstance(values, defaultdict):
+        if ConfigBunch.isdict(values):
             return {
                 key: self.decrypt(value)
                 for key, value in values.items()
             }
         try:
             return decrypt(values, region=self.region, profile=self.profile)
-        except:
+        except:  # noqa: E722, pylint: disable=bare-except,
             return values
 
 
@@ -176,11 +180,12 @@ class LazyKmsBunch(ConfigBunch):
         :type profile: str
         :type region: str
         """
-        from djenga.encryption.kms_wrapped import decrypt
+        from ..encryption.kms_wrapped import decrypt
         super().__init__()
         self.profile: str = kwargs.get('profile', None)
         self.region: str = kwargs.get('region', None)
-        self.decrypt_fn = partial(decrypt, region=self.region, profile=self.profile)
+        self.decrypt_fn = partial(
+            decrypt, region=self.region, profile=self.profile)
         for x in filenames:
             try:
                 with open(x, 'r') as f:
@@ -192,9 +197,9 @@ class LazyKmsBunch(ConfigBunch):
                 logger.debug('[djenga]  file [%s] was not found, skipping.', x)
 
     def lazy_wrap(self, values: Union[Dict, List, str]):
-        if isinstance(values, list) or isinstance(values, tuple):
+        if isinstance(values, (list, tuple)):
             return [ self.lazy_wrap(x) for x in values ]
-        if isinstance(values, dict) or isinstance(values, OrderedDict) or isinstance(values, defaultdict):
+        if ConfigBunch.isdict(values):
             return {
                 key: self.lazy_wrap(value)
                 for key, value in values.items()

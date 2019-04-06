@@ -2,11 +2,11 @@
 
 
 import logging
-from django.core.management.base import BaseCommand
-from commandlogginglevels import VerbosityLevels as V
 import socket
-from djenga.mixins.loggingmixin import LoggingMixin
-from djenga.email.helpers import send_html_email
+from django.core.management.base import BaseCommand
+from ...mixins.loggingmixin import LoggingMixin
+from ...email.helpers import send_html_email
+from .commandlogginglevels import VerbosityLevels as V
 
 
 class EmailCommand(BaseCommand, LoggingMixin):
@@ -19,7 +19,7 @@ class EmailCommand(BaseCommand, LoggingMixin):
     )
 
     def _handle(self, *args, **options):
-        pass
+        return 0
 
     def handle(self, *args, **options):
         self.verbosity = options.get(u'verbosity', 1)
@@ -46,5 +46,4 @@ class EmailCommand(BaseCommand, LoggingMixin):
             template=html_template,
             context=context,
             text_template=text_template,
-            inline_css=True,
         )
