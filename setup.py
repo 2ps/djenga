@@ -1,3 +1,4 @@
+import pkg_resources
 from setuptools import setup, find_packages
 import sys
 try:
@@ -9,13 +10,8 @@ try:
 except ImportError:
     bdist_wheel = None
 
-with open('version', 'r') as f:
-    version = f.read()
-    version = version.strip()
-
-
 setup(name='djenga',
-      version=version,
+      version='1.0.3',
       description="Useful building blocks for Django.",
       long_description="""\
 Useful building blocks for Django.""",
@@ -37,8 +33,8 @@ Useful building blocks for Django.""",
       author_email='p.shingavi@yahoo.com',
       url='https://github.com/2ps/djenga',
       license='BSD',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      include_package_data=True,
+      packages=[ 'djenga' ],
+      include_package_data=False,
       zip_safe=True,
       install_requires=[
           'six>=1.10.0',
