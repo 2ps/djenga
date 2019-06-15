@@ -11,7 +11,7 @@ except ImportError:
     bdist_wheel = None
 
 setup(name='djenga',
-      version='1.0.3',
+      version='1.0.4',
       description="Useful building blocks for Django.",
       long_description="""\
 Useful building blocks for Django.""",
