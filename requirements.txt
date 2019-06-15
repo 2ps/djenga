@@ -6,7 +6,7 @@ pycryptodome>=3.6.6
 pytz
 psutil
 python-dateutil
-pyyaml
+pyyaml<=5.1
 twine
 six
 django-redis-cache
@@ -24,5 +24,7 @@ pytest
 flake8
 pylint
 pylint-django
-mysql-connector-python
-mysqlclient>=1.4.2.post1
+mysql-connector-python; sys_platform == 'darwin'
+mysqlclient>=1.4.2.post1; sys_platform != 'darwin'
+bumpversion==0.5.3
+invoke==1.2.0
