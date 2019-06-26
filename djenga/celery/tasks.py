@@ -1,8 +1,8 @@
-from __future__ import absolute_import
+from abc import abstractmethod
 from collections import OrderedDict
 import logging
 from time import time
-from celery.app.task import Task, Context
+from celery.app.task import Task
 from celery import states
 
 
@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class TaskDetail:
-    def __init__(self, key=None, description=None, *args, **kwargs):
+    def __init__(  # pylint: disable=W1113
+            self, key=None, description=None,
+            *args, **kwargs):
         """
         :type key: str
         :type description: str
@@ -67,7 +69,6 @@ class DetailTask(Task):
                 (key, TaskDetail(key, description),)
                 for key, description in self.details.items()
             ])
-            """:type dict[str, TaskDetail]"""
             self.request.detail_stack = list()
             self.request.current_detail = None
 
@@ -101,7 +102,7 @@ class DetailTask(Task):
         if args:
             try:
                 detail = detail % args
-            except Exception as ex:
+            except Exception as ex:  # pylint: disable=broad-except
                 logger.exception('%s', ex)
         r.current_detail.add_detail(detail)
         logger.info(
@@ -130,3 +131,7 @@ class DetailTask(Task):
         else:
             r.current_detail = None
         self.save_details()
+
+    @abstractmethod
+    def run(self, *args, **kwargs):
+        pass

@@ -1,3 +1,4 @@
+import pkg_resources
 from setuptools import setup, find_packages
 import sys
 try:
@@ -9,10 +10,8 @@ try:
 except ImportError:
     bdist_wheel = None
 
-version = '0.8.1'
-
 setup(name='djenga',
-      version=version,
+      version='1.0.3',
       description="Useful building blocks for Django.",
       long_description="""\
 Useful building blocks for Django.""",
@@ -28,30 +27,32 @@ Useful building blocks for Django.""",
           'Framework :: Django :: 1.9',
           'License :: OSI Approved :: BSD License',
       ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-        cmdclass={'bdist_wheel': bdist_wheel},
+      cmdclass={'bdist_wheel': bdist_wheel},
       keywords='django python',
       author='Preetam Shingavi',
       author_email='p.shingavi@yahoo.com',
       url='https://github.com/2ps/djenga',
       license='BSD',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      include_package_data=True,
+      packages=[ 'djenga' ],
+      include_package_data=False,
       zip_safe=True,
       install_requires=[
           'six>=1.10.0',
           'Django>=1.9',
-          'cssutils==1.0',
+          'cssutils>=1.0',
           'beautifulsoup4>=4.3.2',
           'pynliner>=0.8.0',
-          'pycryptodome>=3.6.1',
+          'pycryptodome>=3.6.6',
           'pytz',
           'python-dateutil',
           'pyyaml',
           'django-redis-cache',
           'celery>=4.1.0',
           'boto3',
+          'requests>=2.19',
       ] + ([ 'psutil' ] if 'cygwin' in sys.platform else []),
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
-    )
+      entry_points={
+          'console_scripts': [
+              'kms_wrap=djenga.encryption.kms_wrap:main',
+          ],
+      })

@@ -3,7 +3,7 @@ import json
 import yaml
 
 
-class ConfigurationMixin(object):
+class ConfigurationMixin:
     """
     Enhances a django management command by allowing it to
     read from a configuration file at the beginning of its

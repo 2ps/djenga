@@ -1,6 +1,6 @@
-from __future__ import absolute_import, unicode_literals, print_function
 import logging
 import logging.handlers
+from logging.handlers import TimedRotatingFileHandler
 import os
 
 
@@ -15,18 +15,18 @@ __all__ = [
 ]
 
 
-class _Constants(object):
+class _Constants:
     LEVEL_COLORS = {
         """
         Maps a logging level to a pair of colors:
             first color is the label color
             second color is the text color
         """
-        'DEBUG':    (33,  39),
-        'TRACE':    (147, 153),
-        'INFO':     (43,  49),
-        'WARNING':  (214, 226),
-        'ERROR':    (196, 197),
+        'DEBUG': (33, 39),
+        'TRACE': (147, 153),
+        'INFO': (43, 49),
+        'WARNING': (214, 226),
+        'ERROR': (196, 197),
         'CRITICAL': (196, 197),
     }
 
@@ -65,11 +65,11 @@ class _Constants(object):
 
 
 class ColorFormatter(logging.Formatter):
-    def format(self, record):
+    def format(self, record):  # noqa: C901
         level_colors = _Constants.LEVEL_COLORS.get(record.levelname, (33, 39))
         # setup the 256-color spectrum
-        st_color   = "\033[38;5;{:d}m"
-        st_reset   = "\033[0m"
+        st_color = "\033[38;5;{:d}m"
+        st_reset = "\033[0m"
         message = logging.Formatter.format(self, record)
 
         # Pass any simple messages from internal things,
@@ -118,10 +118,10 @@ class ColorFormatter(logging.Formatter):
 
 
 class BriefColorFormatter(logging.Formatter):
-    def format(self, record):
+    def format(self, record):  # noqa: C901
         level_colors = _Constants.LEVEL_COLORS.get(record.levelname, (33, 39))
-        st_color   = "\033[38;5;{:d}m"
-        st_reset   = "\033[0m"
+        st_color = "\033[38;5;{:d}m"
+        st_reset = "\033[0m"
         message = logging.Formatter.format(self, record)
 
         # Pass any simple messages from internal things,
@@ -166,14 +166,16 @@ class BriefColorFormatter(logging.Formatter):
         )
 
 
-class WorldWritableRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
+class WorldWritableRotatingFileHandler(TimedRotatingFileHandler):
     def _open(self):
         """Open a new log file with a more permissive umask."""
-        # This is due to jobs-12 running manage.py cron jobs as a different user than what Celery runs as;
-        #   otherwise we'll run into permission errors because the default RotatingFileHandler opens them
+        # This is due to jobs-12 running manage.py cron jobs as a
+        # different user than what Celery runs as;
+        #   otherwise we'll run into permission errors because the
+        #   default RotatingFileHandler opens them
         #   as user writable, not world writable.
-        old_umask = os.umask(0o111) # 666
-        new_file  = logging.handlers.TimedRotatingFileHandler._open(self)
+        old_umask = os.umask(0o111)  # 666
+        new_file = super()._open()
         os.umask(old_umask)
         return new_file
 

@@ -1,5 +1,5 @@
 
-class LookupEnum(object):
+class LookupEnum:
     @classmethod
     def values(cls):
         if hasattr(cls, 'mp_values'):
@@ -15,7 +15,7 @@ class LookupEnum(object):
         return cls.values().get(n_id)
 
 
-class ReversibleEnum(object):
+class ReversibleEnum:
     @classmethod
     def codes(cls):
         if hasattr(cls, 'mp_codes'):

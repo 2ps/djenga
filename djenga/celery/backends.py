@@ -1,5 +1,5 @@
-from celery.backends.redis import RedisBackend
 from collections import OrderedDict
+from celery.backends.redis import RedisBackend
 
 
 __all__ = [

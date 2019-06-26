@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys
 import re
 from functools import partial
@@ -45,42 +44,37 @@ STYLES = (
     'concealed', 'crossed')
 
 
-def color(s, fg=None, bg=None, style=None):
-    sgr = []
+def _ansi_color(x, offset, ansi_code):
+    if x:
+        if x in COLORS:
+            return [ f'{offset + COLORS.index(x)}' ]
+        if isinstance(x, int) and 0 <= x <= 255:
+            return [ f'{ansi_code};5;{x}' ]
+        raise Exception('Invalid color [{x}]')
+    return []
 
-    if fg:
-        if fg in COLORS:
-            sgr.append('%s' % (30 + COLORS.index(fg),))
-        elif isinstance(fg, int) and 0 <= fg <= 255:
-            sgr.append('38;5;%d' % int(fg))
-        else:
-            raise Exception('Invalid color [%s]' % fg)
 
-    if bg:
-        if bg in COLORS:
-            sgr.append(str(40 + COLORS.index(bg)))
-        elif isinstance(bg, int) and 0 <= bg <= 255:
-            sgr.append('48;5;%d' % bg)
-        else:
-            raise Exception('Invalid color "%s"' % bg)
-
+def _style_codes(style):
+    codes = []
     if style:
         for st in style.split('+'):
             if st in STYLES:
-                sgr.append(str(1 + STYLES.index(st)))
+                codes.append(f'{(1 + STYLES.index(st))}')
             else:
-                raise Exception('Invalid style "%s"' % st)
+                raise Exception('Invalid style "{st}"')
+    return codes
 
+
+def color(s, fg=None, bg=None, style=None):
+    sgr = _ansi_color(fg, 30, 38) + _ansi_color(bg, 40, 48)
+    sgr += _style_codes(style)
     if sgr:
-        prefix = '\x1b[' + ';'.join(sgr) + 'm'
-        suffix = '\x1b[0m'
-        return prefix + s + suffix
-    else:
-        return s
+        return f"\x1b[{';'.join(sgr)}m{s}\x1b[0m"
+    return s
 
 
 def strip_color(s):
-    return re.sub('\x1b\[.+?m', '', s)
+    return re.sub(r'\x1b\[.+?m', '', s)
 
 
 # Foreground shortcuts

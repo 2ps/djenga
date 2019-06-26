@@ -1,13 +1,9 @@
-
 # encoding: utf-8
-
-
-from __future__ import unicode_literals
 import logging
 from datetime import date
 
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 __all__ = [
     u'unpack_date',
     u'bump',

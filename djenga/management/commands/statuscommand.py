@@ -1,7 +1,5 @@
 # encoding: utf-8
-
-
-from __future__ import unicode_literals
+from abc import abstractmethod
 import logging
 import codecs
 import sys
@@ -10,8 +8,8 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connections
 from django.utils import timezone
-from djenga.models import ManagementCommand
-from djenga.models import CommandOutput
+from ...models import ManagementCommand
+from ...models import CommandOutput
 
 
 class StatusCommand(BaseCommand):
@@ -25,8 +23,8 @@ class StatusCommand(BaseCommand):
         self.verbosity = verbosity
         self.logging_level = LEVELS[verbosity]
 
-    def create_parser(self, prog_name, subcommand):
-        parser = super(StatusCommand, self).create_parser(prog_name, subcommand)
+    def create_parser(self, prog_name, subcommand, **kwargs):
+        parser = super().create_parser(prog_name, subcommand, **kwargs)
         parser.add_argument(
             '--last',
             action='store_true',
@@ -40,7 +38,7 @@ class StatusCommand(BaseCommand):
             name=self.command_name,
             defaults={
                 'last_run': datetime.now(timezone.utc),
-                'task_status': 'running',
+                'status': 'running',
             }
         )
 
@@ -82,19 +80,23 @@ class StatusCommand(BaseCommand):
 
     def color_format(self, level, message):
         level_colors = {
-            # Level and a pair of colors: first for the label, the rest for the text;
-            #   the bolder color label can make them easier to spot in the console log.
-            logging.DEBUG:        ( 33,  39),
-            # logging.TRACE:        (147, 153),
-            logging.INFO:         ( 43,  49),
-            logging.WARNING:      (214, 226),
-            logging.ERROR:        (196, 197),
-            logging.CRITICAL:     (196, 197),
+            # Level and a pair of colors: first for the label,
+            #   the rest for the text;
+            #   the bolder color label can make
+            #   them easier to spot in the console log.
+            logging.DEBUG: (33, 39),
+            # logging.TRACE: (147, 153),
+            logging.INFO: (43, 49),
+            logging.WARNING: (214, 226),
+            logging.ERROR: (196, 197),
+            logging.CRITICAL: (196, 197),
         }.get(level, (33, 39))
-        color   = "\033[38;5;{:d}m"         # 256-color to give wider spectrum than just ANSI
-        reset   = "\033[0m"
+        # 256-color to give wider spectrum than just ANSI
+        color = "\033[38;5;{:d}m"
+        reset = "\033[0m"
 
-        # Pass any simple messages from internal things, like Django's runserver, without special formatting.
+        # Pass any simple messages from internal things, like Django's
+        # runserver, without special formatting.
         mp_levels = {
             logging.INFO: u'INF',
             logging.WARNING: u'WRN',
@@ -105,10 +107,10 @@ class StatusCommand(BaseCommand):
         st_level = mp_levels[level]
         level_prefix = '%s[%s] ' % (color.format(level_colors[0]), st_level)
         return u'{level_prefix}{color_normal}{message}{reset}'.format(
-            level_prefix    = level_prefix if self.print_level else '',
-            message         = message,
-            color_normal    = color.format(level_colors[1]),
-            reset           = reset
+            level_prefix=level_prefix if self.print_level else '',
+            message=message,
+            color_normal=color.format(level_colors[1]),
+            reset=reset
         )
 
     def llog(self, logging_level, format_string, *args):
@@ -213,8 +215,12 @@ class StatusCommand(BaseCommand):
             self.start_run()
             super(StatusCommand, self).execute(*args, **options)
             success = True
-        except:
+        except:  # noqa: 216
             success = False
             raise
         finally:
             self.end_run(success)
+
+    @abstractmethod
+    def handle(self, *args, **options):
+        pass

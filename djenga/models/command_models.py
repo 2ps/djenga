@@ -35,7 +35,7 @@ class ManagementCommand(models.Model):
 
 
 class CommandOutput(models.Model):
-    command = models.ForeignKey(ManagementCommand)
+    command = models.ForeignKey('ManagementCommand', on_delete=models.CASCADE)
     output = models.TextField(null=True)
     created_at = models.DateTimeField(null=False, auto_now_add=True)
     updated_at = models.DateTimeField(null=False, auto_now=True)

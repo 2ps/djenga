@@ -1,7 +1,6 @@
-from __future__ import absolute_import
-from djenga.profiling.memory import *
-from djenga.profiling.timing import start_timer
-from djenga.profiling.timing import end_timer
+from .memory import *  # noqa: F401, F403
+from .timing import start_timer
+from .timing import end_timer
 
 __all__ = [
     'start_timer',

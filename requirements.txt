@@ -1,15 +1,30 @@
-Django==1.11.6
-cssutils==1.0
-beautifulsoup4==4.6.0
+Django>=1.11.6
+cssutils>=1.0
+beautifulsoup4>=4.6.0
 pynliner==0.8.0
-pycryptodome==3.6.1
+pycryptodome>=3.6.6
 pytz
 psutil
 python-dateutil
-pyyaml
+pyyaml<=5.1
 twine
 six
 django-redis-cache
-celery>=4.1.0
+celery>=4.2.1
 django-extensions
 ipython
+setuptools
+wheel
+boto3
+awscli
+requests
+testfixtures
+coverage
+pytest
+flake8
+pylint
+pylint-django
+mysql-connector-python; sys_platform == 'darwin'
+mysqlclient>=1.4.2.post1; sys_platform != 'darwin'
+bumpversion==0.5.3
+invoke==1.2.0

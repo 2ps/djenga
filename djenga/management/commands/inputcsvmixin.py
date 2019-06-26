@@ -3,7 +3,7 @@ import csv
 # from django.core.management.base import BaseCommand
 
 
-class InputCsvMixin(object):
+class InputCsvMixin:
     """
     Enhances a django management command by allowing it to
     read from an input CSV file through an

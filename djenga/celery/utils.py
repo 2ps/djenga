@@ -1,6 +1,7 @@
 # encoding: utf-8
 from functools import wraps
 import logging
+from celery.signals import worker_process_init
 
 
 __all__ = [
@@ -8,8 +9,10 @@ __all__ = [
     'auto_step',
     'unbound_step',
     'substep',
+    'json_logging',
+    'mark_celery_running',
 ]
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def update_progress(task, progress, *args, **kwargs):
@@ -39,7 +42,7 @@ def update_progress(task, progress, *args, **kwargs):
     for key, value in kwargs.items():
         values[key] = value
     setattr(task.request, 'info', values)
-    logger.info(progress)
+    log.info(progress)
 
 
 def auto_step(key, description=None,
@@ -102,3 +105,44 @@ def substep(task, fn):
     if task:
         task.update_step(fn.__name__)
     return fn
+
+
+def json_formatter(
+        sender, logger: logging.Logger, loglevel, logfile,
+        format, colorize, **kw):
+    from ..logging import JsonFormatter
+    for h in logger.handlers:
+        h.formatter = JsonFormatter()
+
+
+def json_task_formatter(
+        sender, logger: logging.Logger, loglevel, logfile,
+        format, colorize, **kw):
+    from ..logging import JsonTaskFormatter
+    for h in logger.handlers:
+        h.formatter = JsonTaskFormatter()
+
+
+def json_logging():
+    """
+    Initializes the celery logging so that it uses
+    our custom json formatter.
+    """
+    from celery.signals import after_setup_logger
+    from celery.signals import after_setup_task_logger
+
+    after_setup_logger.connect(json_formatter)
+    after_setup_task_logger.connect(json_task_formatter)
+
+
+def _mark_celery_running(sender, **kwargs):
+    from django.conf import settings
+    settings.IS_CELERY_RUNNING = True
+
+
+def mark_celery_running():
+    """
+    marks celery as running by setting the `IS_CELERY_RUNNING`
+    flag in the `django.conf` `settings` object.
+    """
+    worker_process_init.connect(_mark_celery_running)

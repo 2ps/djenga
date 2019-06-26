@@ -1,0 +1,7 @@
+[flake8]
+ignore=E201,E202,W503,W504,W391,E203
+exclude =
+  */__init__.py,
+  */migrations/*
+max_complexity=6
+max_line_length=79

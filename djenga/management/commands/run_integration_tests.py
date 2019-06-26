@@ -4,9 +4,9 @@ import sys
 from importlib import import_module
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from djenga.test import IntegrationTest
-from djenga.mixins import LoggingMixin
-from djenga.utils.print_utils import dot_lead
+from ...test import IntegrationTest
+from ...mixins import LoggingMixin
+from ...utils.print_utils import dot_lead
 
 
 class Command(LoggingMixin, BaseCommand):
@@ -27,12 +27,10 @@ class Command(LoggingMixin, BaseCommand):
     def __init__(self, stdout=None, stderr=None, no_color=False):
         super(Command, self).__init__(stdout, stderr, no_color)
         self.modules = None
-        """@type: list[str] list of dot delimited modules in which to look for tests"""
         self.tests = None
-        """@type: list[str] list of class names of specific tests wanted to be run"""
 
-    def create_parser(self, prog_name, subcommand):
-        parser = super(Command, self).create_parser(prog_name, subcommand)
+    def create_parser(self, prog_name, subcommand, **kwargs):
+        parser = super().create_parser(prog_name, subcommand, **kwargs)
         parser.add_argument(
             '--module', '-m',
             action='append',
@@ -77,7 +75,8 @@ class Command(LoggingMixin, BaseCommand):
             self.info(dot_lead('Checking %s for tests', module))
             module = import_module(module)
             for name, klass in inspect.getmembers(module):
-                if name.startswith('__') or not inspect.isclass(klass): continue
+                if name.startswith('__') or not inspect.isclass(klass):
+                    continue
                 x = klass()
                 if isinstance(x, IntegrationTest) and (
                     not tests or

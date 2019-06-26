@@ -1,15 +1,15 @@
 import os
 from io import BytesIO
-from zipfile import ZipFile, ZIP_DEFLATED
-from StringIO import StringIO
-from djenga.csv import UnicodeCsvWriter
+from io import StringIO
 from wsgiref.util import FileWrapper
+from zipfile import ZipFile, ZIP_DEFLATED
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.views.generic import View
+from ..csv.unicode_csv_writer import UnicodeCsvWriter
 
 
-class CsvViewMixin(object):
+class CsvViewMixin:
     """
     This class offers several utility functions to
     make it easier to return a CSV response to a user.
@@ -34,8 +34,9 @@ class CsvViewMixin(object):
         :param filename: the default filename for the user
         when he/she downloads the file.
         """
+        key = 'Content-Disposition'
         self.response = HttpResponse(content_type='text/csv')
-        self.response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        self.response[key] = f'attachment; filename="{filename}"'
         self.writer = UnicodeCsvWriter(self.response)
 
     def writerow(self, data):
@@ -47,10 +48,9 @@ class CsvView(CsvViewMixin, View):
     A helper class so that you can just subclass from
     CsvView directly instead of using the mixin.
     """
-    pass
 
 
-class ZippedCsvMixin(object):
+class ZippedCsvMixin:
     """
     This mixin offers several utility functions to
     make it easier to return a CSV response to a user.
@@ -85,12 +85,20 @@ class ZippedCsvMixin(object):
         self.filename = filename
         self.archive = ZipFile(self.zip_buffer, 'w', compression=ZIP_DEFLATED)
 
+    @staticmethod
+    def disposition(filename):
+        return f'attachment; filename="{filename}"'
+
     def finalize_response(self):
-        self.archive.writestr(self.filename, self.csv_buffer.getvalue().encode('utf-8'))
-        self.archive.close()
+        buffer = self.csv_buffer.getvalue().encode('utf-8')
         _, ext = os.path.splitext(self.filename)
-        self.response = StreamingHttpResponse(FileWrapper(self.zip_buffer), content_type='application/zip')
-        self.response['Content-Disposition'] = 'attachment; filename="%s"' % self.filename.replace(ext, '.zip')
+        filename = self.filename.replace(ext, 'zip')
+        disposition = ZippedCsvMixin.disposition(filename)
+        self.archive.writestr(self.filename, buffer)
+        self.archive.close()
+        self.response = StreamingHttpResponse(FileWrapper(
+            self.zip_buffer), content_type='application/zip')
+        self.response['Content-Disposition'] = disposition
         self.response['Content-Length'] = self.zip_buffer.tell()
         self.zip_buffer.seek(0)
 
@@ -103,4 +111,3 @@ class ZippedCsvView(ZippedCsvMixin, View):
     A helper class so that you can just subclass from
     ZippedCsvView directly instead of using the mixin.
     """
-    pass
