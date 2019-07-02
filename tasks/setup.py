@@ -19,9 +19,10 @@ def deploy(ctx):
         * builds the djenga tarball and bdist_wheel
         * pushes the build to pypi
     """
-    ctx.run('bumpversion patch')
-    ctx.run('python setup.py sdist')
+    # ctx.run('bumpversion patch')
+    ctx.run('rm -rf build dist')
     ctx.run('python setup.py bdist_wheel')
+    ctx.run('python setup.py sdist')
 
 
 def detect_ec2(ctx):

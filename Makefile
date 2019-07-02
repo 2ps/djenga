@@ -5,5 +5,6 @@ lint:
 
 test:
 	source bin/activate \
+	  && pip install -e . \
 	  && pytest --cov=djenga tests/
 

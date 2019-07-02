@@ -21,6 +21,7 @@ requests
 testfixtures
 coverage
 pytest
+pytest-cov
 flake8
 pylint
 pylint-django
