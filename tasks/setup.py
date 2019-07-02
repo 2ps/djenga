@@ -6,6 +6,7 @@ from invoke import task
 __all__ = [
     'deploy',
     'setup',
+    'build',
 ]
 
 
@@ -19,7 +20,13 @@ def deploy(ctx):
         * builds the djenga tarball and bdist_wheel
         * pushes the build to pypi
     """
-    # ctx.run('bumpversion patch')
+    ctx.run('bumpversion patch')
+    build(ctx)
+    ctx.run('twine upload dist/*')
+
+
+@task
+def build(ctx):
     ctx.run('rm -rf build dist')
     ctx.run('python setup.py bdist_wheel')
     ctx.run('python setup.py sdist')
