@@ -1,18 +1,21 @@
-import pkg_resources
 from setuptools import setup, find_packages
 import sys
-try:
-    from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+# try:
+#     from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+#     class bdist_wheel(_bdist_wheel):
+#         def finalize_options(self):
+#             _bdist_wheel.finalize_options(self)
+#             self.root_is_pure = True
+# except ImportError:
+#     bdist_wheel = None
+#
+with open('version', 'r') as f:
+    version = f.read()
+    version = version.strip()
 
-    class bdist_wheel(_bdist_wheel):
-        def finalize_options(self):
-            super().finalize_options()
-
-except ImportError:
-    bdist_wheel = None
 
 setup(name='djenga',
-      version='1.0.5',
+      version=version,
       description="Useful building blocks for Django.",
       long_description="""\
 Useful building blocks for Django.""",
@@ -28,13 +31,13 @@ Useful building blocks for Django.""",
           'Framework :: Django :: 1.9',
           'License :: OSI Approved :: BSD License',
       ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      cmdclass={'bdist_wheel': bdist_wheel},
+      # cmdclass={'bdist_wheel': bdist_wheel},
       keywords='django python',
       author='Preetam Shingavi',
       author_email='p.shingavi@yahoo.com',
       url='https://github.com/2ps/djenga',
       license='BSD',
-      packages=[ 'djenga' ],
+      packages=find_packages(exclude=['djenga_tests', 'tasks', 'tests']),
       include_package_data=False,
       zip_safe=True,
       install_requires=[

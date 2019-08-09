@@ -27,6 +27,7 @@ def deploy(ctx):
 
 @task
 def build(ctx):
+    ctx.run('rm -rf build djenga.egg-info')
     ctx.run('rm -rf build dist')
     ctx.run('python setup.py bdist_wheel')
     ctx.run('python setup.py sdist')
