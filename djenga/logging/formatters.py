@@ -52,6 +52,10 @@ class JsonFormatter(logging.Formatter):
             'module': record.module,
             'level': record.levelname,
             'line_number': record.lineno,
+            'logger': record.name,
+            'exception_info': getattr(record, 'exc_info', None),
+            'exception_text': getattr(record, 'exc_text', None),
+            'stack_info': getattr(record, 'stack_info', None),
         }
         for key, value in record.__dict__.items():
             if key not in JsonFormatter.DEFAULT_KEYS:
