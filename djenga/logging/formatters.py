@@ -53,10 +53,15 @@ class JsonFormatter(logging.Formatter):
             'level': record.levelname,
             'line_number': record.lineno,
             'logger': record.name,
-            'exception_info': getattr(record, 'exc_info', None),
-            'exception_text': getattr(record, 'exc_text', None),
-            'stack_info': getattr(record, 'stack_info', None),
         }
+        exception_info = record.exc_info
+        if exception_info:
+            exception_type = record.exc_info[0]
+            data['exception_type'] = (
+                f'{exception_type.__module__}.'
+                f'{exception_type.__name__}'
+            )
+            data['exception_args'] = list(record.exc_info[1].args)
         for key, value in record.__dict__.items():
             if key not in JsonFormatter.DEFAULT_KEYS:
                 data[key] = value
@@ -68,7 +73,7 @@ class JsonFormatter(logging.Formatter):
 
 class JsonTaskFormatter(JsonFormatter):
     """
-    This formatter is useful if you want to ship logs to a
+    This formatter is useful if you want to ship celery logs to a
     json-based centralized log aggregation platform like ELK.
     n.b., this formatter is very opinionated.
     """

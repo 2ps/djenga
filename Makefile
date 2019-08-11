@@ -5,6 +5,7 @@ lint:
 
 test:
 	source bin/activate \
-	  && pip install -e . \
-	  && pytest --cov=djenga tests/
-
+	  && coverage run --source='djenga' \
+	      manage.py test -k -v2 --debug-mode
+	source bin/activate \
+	  && coverage report --show-missing --include='$*/*'

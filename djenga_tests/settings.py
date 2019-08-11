@@ -136,3 +136,36 @@ CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'pickle'
 CELERY_ACCEPT_CONTENT = [ 'pickle', 'json', ]
 SHELL_PLUS = 'ipython'
+LOGGING = {
+    'root': {
+        'level': 'DEBUG',
+        'handlers': [ 'console-brief' ],
+    },
+    'version':                  1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'json': {
+            u'()': 'djenga.logging.JsonFormatter',
+        },
+        'console-detailed': {
+            u'format':           u'%(funcName)s:%(lineno)d %(message)s',
+            u'()':               u'djenga.loggers.ColorFormatter',
+        },
+        'console-brief': {
+            # uncomment this line if there is a logger
+            # printing out stuff that you want to suppress
+            # during debugging
+            # u'format':           u'[%(name)s] %(message)s',
+            u'format':           u'%(message)s',
+            u'()':               u'djenga.loggers.BriefColorFormatter',
+        },
+    },
+    'handlers': {
+        'console-brief': {
+            'level':            'DEBUG',
+            'class':            'logging.StreamHandler',
+            'stream':           'ext://sys.stdout',
+            'formatter':        'console-brief',
+        },
+    },
+}

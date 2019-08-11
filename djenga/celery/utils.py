@@ -109,7 +109,7 @@ def substep(task, fn):
 
 def json_formatter(
         sender, logger: logging.Logger, loglevel, logfile,
-        format, colorize, **kw):
+        format, colorize, **kw):  # pylint: disable=redefined-builtin
     from ..logging import JsonFormatter
     for h in logger.handlers:
         h.formatter = JsonFormatter()
@@ -117,7 +117,7 @@ def json_formatter(
 
 def json_task_formatter(
         sender, logger: logging.Logger, loglevel, logfile,
-        format, colorize, **kw):
+        format, colorize, **kw):  # pylint: disable=redefined-builtin
     from ..logging import JsonTaskFormatter
     for h in logger.handlers:
         h.formatter = JsonTaskFormatter()
