@@ -28,4 +28,4 @@ pylint-django
 mysql-connector-python; sys_platform == 'darwin'
 mysqlclient>=1.4.2.post1; sys_platform != 'darwin'
 bumpversion==0.5.3
-invoke==1.2.0
+raft==1.4.1.3

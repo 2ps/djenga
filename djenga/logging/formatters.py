@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import logging
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 __all__ = [
@@ -68,7 +69,7 @@ class JsonFormatter(logging.Formatter):
         return data
 
     def format(self, record: logging.LogRecord):
-        return json.dumps(self.to_dict(record))
+        return json.dumps(self.to_dict(record), cls=DjangoJSONEncoder)
 
 
 class JsonTaskFormatter(JsonFormatter):

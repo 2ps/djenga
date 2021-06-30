@@ -63,7 +63,7 @@ class Command(LoggingMixin, BaseCommand):
             display_warnings = True
         else:
             modules = [
-                '%s.integration_tests' % x
+                f'{x}.integration_tests'
                 for x in settings.INSTALLED_APPS ]
         self.modules = [
             x for x in modules
