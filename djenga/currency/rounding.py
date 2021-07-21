@@ -34,7 +34,16 @@ __all__ = [
     'round_down',
     'round_half_up',
     'round_floor',
+    'truncate',
 ]
+
+
+def truncate(n, decimals=2):
+    """
+    helper to truncate decimal without rounding
+    """
+    multiplier = 10 ** decimals
+    return int(n * multiplier) / multiplier
 
 
 def currency_round_down(amount):
